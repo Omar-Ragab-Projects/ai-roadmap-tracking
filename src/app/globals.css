@@ -7,6 +7,7 @@
   /* --foreground: #0b0b0b; */
   --foreground: #f7f7f7;
   --primary: #5554b6;
+  --gray: #afaeb4;
   --secondary: #008994;
   --accent: #ee560c;
   --card: #ffffff;
@@ -18,12 +19,14 @@
   --sidebar: #030114;
   --sidebar-primary: #5553b5;
   --sidebar-border: #12122b;
+  --text: #6a6a6a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
+  --color-gray: var(--gray);
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
   --color-card: var(--card);
@@ -33,9 +36,12 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-sidebar: var(--sidebar);
+  --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-border: var(--sidebar-border);
+  --color-text: var(--text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --animate-move-left: move-left 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -49,4 +55,59 @@ body {
   /* background: var(--background);
   color: var(--foreground); */
   /* font-family: Arial, Helvetica, sans-serif; */
+}
+
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+
+@utility flex-between {
+  @apply flex items-center justify-between;
+}
+
+@utility top-center {
+  @apply top-1/2 -translate-y-1/2;
+}
+
+/* @layer base { */
+input,
+textarea {
+  @apply w-full p-4 rounded-lg outline-1 outline-gray/60 focus:placeholder:text-gray/90 focus:outline-primary/10 focus:outline-1 focus:text-sidebar text-sidebar/80 font-normal focus:shadow-md transition duration-300;
+}
+
+textarea {
+  @apply min-h-[100px] max-h-[150px];
+}
+
+label {
+  @apply font-semibold has-focus:text-sidebar text-sidebar/80 flex flex-col gap-2;
+}
+/* } */
+
+@layer components {
+  .tooltip {
+    @apply absolute top-center left-[calc(100%+0.8rem)] bg-[#f6f6f6] text-sidebar rounded-lg px-3 py-2 text-sm w-max;
+  }
+
+  .tooltip::after {
+    content: "";
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 12px solid transparent;
+    border-right-width: 8px;
+    border-right-color: #f6f6f6;
+  }
+}
+
+@keyframes move-left {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }

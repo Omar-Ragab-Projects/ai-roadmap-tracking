@@ -19,7 +19,7 @@ export const routes = [
     icon: ChartColumn,
   },
   {
-    name: "Ai Generator",
+    name: "AI Generator",
     path: "/ai-generator",
     icon: WandSparkles,
   },
@@ -34,7 +34,7 @@ export const routes = [
     icon: Zap,
   },
   {
-    name: "Ai Assistant",
+    name: "AI Assistant",
     path: "/ai-assistant",
     icon: Sparkles,
   },
