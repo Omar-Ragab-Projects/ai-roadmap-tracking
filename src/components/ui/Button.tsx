@@ -1,4 +1,4 @@
-import { LucideProps } from "lucide-react";
+import { Loader, Loader2, LucideProps } from "lucide-react";
 
 interface ButtonProps {
   title: string;
@@ -9,6 +9,7 @@ interface ButtonProps {
   className?: string;
   type?: "button" | "submit";
   disabled?: boolean;
+  loading?: boolean;
 }
 
 export default function Button({
@@ -18,6 +19,7 @@ export default function Button({
   className = "",
   type = "submit",
   disabled = false,
+  loading = false,
 }: ButtonProps) {
   const buttonClassname = () => {
     let joinClasses = `flex-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all font-semibold ${className} `;
@@ -42,8 +44,9 @@ export default function Button({
 
   return (
     <button type={type} disabled={disabled} className={buttonClassname()}>
-      {Icon && <Icon size={16} />}
-      <span>{title}</span>
+      {loading && <Loader2 size={16} className="animate-spin" />}
+      {!loading && Icon && <Icon size={16} />}
+      {!loading && title && <span>{title}</span>}
     </button>
   );
 }

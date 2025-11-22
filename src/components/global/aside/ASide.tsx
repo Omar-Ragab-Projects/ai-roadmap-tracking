@@ -14,7 +14,7 @@ export default function ASide() {
 
   return (
     <aside
-      className={`h-lvh bg-sidebar text-foreground flex flex-col 
+      className={`h-lvh bg-sidebar text-background flex flex-col sticky top-0
     ${smallView ? "w-[100px] transition-all duration-300" : "w-[250px]"}`}
     >
       <div className="p-6 border-b border-sidebar-border relative">

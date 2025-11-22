@@ -5,8 +5,8 @@ import IconTitle from "@/components/ui/IconTitle";
 import { ArrowLeft, Blocks } from "lucide-react";
 import Link from "next/link";
 import FormProvider from "@/components/global/form/FormProvider";
-import { addRoadmapAction } from "@/utils/actions/roadmap";
 import { redirect } from "next/navigation";
+import { addRoadmapAction } from "@/utils/entities/roadmaps/server";
 
 export default async function CreateRoadmapPage() {
   const onSuccess = async () => {

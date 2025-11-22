@@ -2,6 +2,7 @@ import Button from "@/components/ui/Button";
 import PageTitle from "@/components/ui/PageTitle";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import RoadmapsList from "./_components/RoadmapsList";
 
 export default function RoadmapsPage() {
   return (
@@ -16,7 +17,9 @@ export default function RoadmapsPage() {
         </Link>
       </header>
 
-      <section></section>
+      <section>
+        <RoadmapsList />
+      </section>
     </>
   );
 }
