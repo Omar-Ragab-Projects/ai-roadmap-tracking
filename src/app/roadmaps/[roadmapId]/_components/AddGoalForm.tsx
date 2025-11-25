@@ -27,7 +27,10 @@ export default function AddGoalForm({
       onSuccess={hideAddGoalForm}
     >
       <X
-        onClick={hideAddGoalForm}
+        onClick={(e) => {
+          hideAddGoalForm();
+          e.stopPropagation();
+        }}
         size={20}
         className="absolute right-4 top-4 text-text/80 hover:text-text/60 cursor-pointer"
       />

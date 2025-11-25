@@ -50,6 +50,9 @@ export default function Button({
       type={type}
       disabled={disabled}
       className={buttonClassname()}
+      onPointerDown={(e) => {
+        e.stopPropagation();
+      }}
     >
       {loading && <Loader2 size={16} className="animate-spin" />}
       {!loading && Icon && <Icon size={16} />}

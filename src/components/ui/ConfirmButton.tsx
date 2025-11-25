@@ -75,6 +75,7 @@ export default function ConfirmButton({
         )
       ) : (
         <button
+          className="active:outline-0"
           onPointerDown={(e) => {
             e.stopPropagation();
           }}

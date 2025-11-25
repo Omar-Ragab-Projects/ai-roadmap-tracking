@@ -21,7 +21,7 @@ export const addGoalAction = async (
     name,
     description,
     priority: priority || "medium",
-    status: "pending",
+    status: "todo",
   };
 
   console.log(data);
@@ -49,6 +49,23 @@ export const deleteGoalAction = async (
     console.log(res);
     revalidatePath(`/roadmaps/${roadmapId}`);
     return { status: "success", message: "Goal deleted successfully!" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+export const updateGoalStatus = async (
+  goalId: string,
+  status: string
+): Promise<{ status: "success" | "error"; message: string }> => {
+  const supabase = await createClient();
+  try {
+    const res = await supabase
+      .from("goals")
+      .update({ status })
+      .eq("id", goalId);
+    console.log(res);
+    return { status: "success", message: "Goal status updated successfully!" };
   } catch (error) {
     return renderError(error);
   }

@@ -13,4 +13,5 @@ export interface Goal {
   description?: string | null;
   priority: number;
   created_at: string;
+  status: "todo" | "inprogress" | "done";
 }

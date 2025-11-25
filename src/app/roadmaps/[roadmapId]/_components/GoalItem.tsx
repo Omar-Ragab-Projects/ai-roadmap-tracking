@@ -4,6 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Trash2 } from "lucide-react";
 import ConfirmButton from "@/components/ui/ConfirmButton";
 import { deleteGoalAction } from "@/utils/entities/goals/server";
+import AddGoalButton from "./AddGoalButton";
 
 export default function GoalItem({ goal }: { goal?: any }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -17,31 +18,25 @@ export default function GoalItem({ goal }: { goal?: any }) {
   const getPriorityStyles = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-primary bg-red-100";
+        return "bg-primary text-white";
       case "medium":
-        return "bg-secondary bg-yellow-100";
+        return "bg-secondary/75 text-yellow-100";
       case "low":
-        return "bg-gray bg-green-100";
+        return "bg-gray text-white";
       default:
-        return "text-text bg-muted";
+        return "text-text text-muted";
     }
   };
   return (
     <li
-      className="cursor-grab bg-primary/10 hover:bg-primary/15 active:bg-primary/20 rounded-lg p-6 mb-3"
+      className="cursor-grab list-none bg-[#dedee8] hover:bg-[#e2e2e2] active:bg-[#d4d4dd] active:opacity-40 rounded-lg p-6 mb-3"
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
     >
       {/* ... */}
-      <div
-        className="flex justify-between"
-        onClick={(e) => e.preventDefault()}
-        onMouseDown={(e) => e.preventDefault()}
-        onMouseEnter={(e) => e.preventDefault()}
-        onMouseOver={(e) => e.preventDefault()}
-      >
+      <div className="flex justify-between">
         <div>
           <h4 className="font-medium">{goal.name}</h4>
           <p className="text-text">{goal.description || "-"}</p>
@@ -61,13 +56,11 @@ export default function GoalItem({ goal }: { goal?: any }) {
           }}
         >
           <Trash2
-            onClick={(e) => {
-              e.preventDefault();
-            }}
             size={18}
             className="text-red-400 cursor-pointer w-8 h-8 hover:text-red-500 p-2"
           />
         </ConfirmButton>
+        {/* <AddGoalButton roadmapId={goal.roadmap_id} /> */}
       </div>
     </li>
   );

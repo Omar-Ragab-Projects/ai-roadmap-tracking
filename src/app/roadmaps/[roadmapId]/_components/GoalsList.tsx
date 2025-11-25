@@ -2,26 +2,49 @@
 import { Goal, Roadmap } from "@/types/roadmap";
 import {
   DndContext,
-  closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
+  closestCorners,
+  DragOverlay,
 } from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useEffect, useState } from "react";
+import SortableContainer from "./dnd/SortableContainer";
 import GoalItem from "./GoalItem";
+import { updateGoalStatus } from "@/utils/entities/goals/server";
+
+interface GloalsListTypes {
+  todo: Goal[];
+  inprogress: Goal[];
+  done: Goal[];
+}
 
 export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
-  const [goals, setGoals] = useState<Goal[]>([]);
+  const [goals, setGoals] = useState<GloalsListTypes>({
+    todo: [],
+    inprogress: [],
+    done: [],
+  });
+
+  // console.log(goals);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (roadmap.goals) setGoals(roadmap.goals);
+    if (roadmap.goals) {
+      const todoGoals = roadmap.goals.filter((goal) => goal.status === "todo");
+      const inprogressGoals = roadmap.goals.filter(
+        (goal) => goal.status === "inprogress"
+      );
+      const doneGoals = roadmap.goals.filter((goal) => goal.status === "done");
+
+      setGoals({
+        todo: todoGoals || [],
+        inprogress: inprogressGoals || [],
+        done: doneGoals || [],
+      });
+    }
   }, [roadmap]);
 
   const sensors = useSensors(
@@ -33,39 +56,94 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
 
   function handleDragEnd(event: any) {
     const { active, over } = event;
+    console.log("Drag End:", { active, over });
+    const activeContainer = active.data.current.sortable?.containerId;
+    const overContainer =
+      over?.data?.current?.sortable?.containerId || over?.id;
 
-    if (active.id !== over.id) {
-      setGoals((goals) => {
-        const oldIndex = goals.findIndex((goal) => goal.id === active.id);
-        const newIndex = goals.findIndex((goal) => goal.id === over.id);
+    // Guard: if no valid target or same element, do nothing
+    if (!over || active.id === over.id) return;
 
-        return arrayMove(goals, oldIndex, newIndex);
+    const currentItems = goals[activeContainer as keyof GloalsListTypes] || [];
+    const overItems = goals[overContainer as keyof GloalsListTypes] || [];
+
+    const oldIndex = currentItems.findIndex((goal) => goal.id === active.id);
+    const newIndex = overItems.findIndex((goal) => goal.id === over.id);
+
+    // If moving within the same container
+    if (activeContainer && overContainer && activeContainer === overContainer) {
+      if (oldIndex === -1 || newIndex === -1) return;
+      setGoals((prev) => {
+        const box = { ...prev };
+        box[activeContainer as keyof GloalsListTypes] = arrayMove(
+          box[activeContainer as keyof GloalsListTypes],
+          oldIndex,
+          newIndex
+        );
+        return box;
       });
+      return;
+    }
+
+    // Moving between different containers: remove from source and insert into destination
+    if (activeContainer && overContainer && activeContainer !== overContainer) {
+      setGoals((prev) => {
+        const box = { ...prev };
+
+        const source = [
+          ...(box[activeContainer as keyof GloalsListTypes] || []),
+        ];
+        const dest = [...(box[overContainer as keyof GloalsListTypes] || [])];
+
+        console.log({ source, dest, oldIndex, newIndex });
+        // If the item cannot be found in source, abort
+        if (oldIndex === -1) return prev;
+
+        const [moved] = source.splice(oldIndex, 1);
+
+        // If over item wasn't found, append to the end
+        const insertAt = newIndex === -1 ? dest.length : newIndex + 1;
+        moved.status = overContainer;
+        dest.splice(insertAt, 0, moved);
+
+        box[activeContainer as keyof GloalsListTypes] = source;
+        box[overContainer as keyof GloalsListTypes] = dest;
+
+        return box;
+      });
+      updateGoalStatus(active.id, overContainer);
     }
   }
 
+  function handleDragStart(event: any) {
+    const { active } = event;
+    const { id } = active;
+
+    setActiveId(id);
+  }
+
   return (
-    <div className="mt-10">
+    <div className="mt-10 grid grid-cols-3 gap-4">
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCenter}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={goals} strategy={verticalListSortingStrategy}>
-          <div>
-            <h3>Todo</h3>
-            <ul className="bg-muted/50 p-4 rounded-xl border-2 border-dashed border-black/5 mt-4">
-              {goals.length === 0 && (
-                <li className="text-center text-text/60 py-10">
-                  No goals added yet.
-                </li>
-              )}
-              {goals.map((goal) => (
-                <GoalItem key={goal.id} goal={goal} />
-              ))}
-            </ul>
-          </div>
-        </SortableContext>
+        <SortableContainer id="todo" items={goals.todo} title="Todo" />
+        <SortableContainer
+          id="inprogress"
+          items={goals.inprogress}
+          title="In Progress"
+        />
+        <SortableContainer id="done" items={goals.done} title="Done" />
+        <DragOverlay>
+          {activeId && roadmap?.goals ? (
+            <GoalItem
+              goal={roadmap.goals.find((goal) => goal.id == +activeId)}
+            />
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </div>
   );
