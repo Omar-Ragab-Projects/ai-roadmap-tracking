@@ -1,9 +1,10 @@
 import BackTo from "@/components/ui/BackTo";
-import Button from "@/components/ui/Button";
-import { fetchRoadmap } from "@/utils/entities/roadmaps/server";
-import { ArrowLeft, Plus } from "lucide-react";
-import React from "react";
+import {
+  fetchRoadmap,
+  fetchRoadmapCache,
+} from "@/utils/entities/roadmaps/server";
 import AddGoalButton from "./_components/AddGoalButton";
+import GoalsList from "./_components/GoalsList";
 
 export default async function RoadmapPage({
   params,
@@ -11,9 +12,9 @@ export default async function RoadmapPage({
   params: Promise<{ roadmapId: string }>;
 }) {
   const roadmapId = (await params).roadmapId;
-  const roadmap = await fetchRoadmap(roadmapId);
+  const roadmap = await fetchRoadmapCache(roadmapId);
 
-  console.log(roadmap);
+  // console.log(roadmap);
   return (
     <div>
       {/* Header */}
@@ -30,6 +31,7 @@ export default async function RoadmapPage({
         <AddGoalButton roadmapId={roadmap.id} />
       </div>
       {/* Goals */}
+      <GoalsList roadmap={roadmap} />
     </div>
   );
 }

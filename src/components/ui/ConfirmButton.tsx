@@ -57,6 +57,9 @@ export default function ConfirmButton({
                   <input key={k} type="hidden" name={k} value={String(v)} />
                 ))}
               <X
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                }}
                 onClick={hideConfirmation}
                 size={20}
                 className="absolute right-4 top-4 text-text/80 hover:text-text/60 cursor-pointer"
@@ -71,7 +74,17 @@ export default function ConfirmButton({
           document.body
         )
       ) : (
-        <button onClick={showConfirmation}>{children}</button>
+        <button
+          onPointerDown={(e) => {
+            e.stopPropagation();
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            showConfirmation();
+          }}
+        >
+          {children}
+        </button>
       )}
     </>
   );

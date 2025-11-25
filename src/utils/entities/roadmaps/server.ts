@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import renderError from "@/utils/renderError";
+import { cache } from "react";
 
 export const addRoadmapAction = async (
   prev: any,
@@ -82,7 +83,7 @@ export const fetchRoadmap = async (roadmapId: string) => {
     .from("goals")
     .select("*")
     .eq("roadmap_id", roadmapId)
-    .order("priority", { ascending: true });
+    .order("created_at", { ascending: true });
 
   try {
     const [roadmapRes, goalsRes] = await Promise.all([roadmapQuery, goalQuery]);
@@ -95,3 +96,5 @@ export const fetchRoadmap = async (roadmapId: string) => {
     renderError(error);
   }
 };
+
+export const fetchRoadmapCache = cache(fetchRoadmap);

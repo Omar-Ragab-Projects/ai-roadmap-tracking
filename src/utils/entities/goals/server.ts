@@ -2,6 +2,7 @@
 
 import renderError from "@/utils/renderError";
 import { createClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export const addGoalAction = async (
   prev: any,
@@ -28,7 +29,26 @@ export const addGoalAction = async (
   try {
     const res = await supabase.from("goals").insert(data);
     console.log(res);
+    revalidatePath(`/roadmaps/${roadmapId}`);
     return { status: "success", message: "Goal created successfully!" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+export const deleteGoalAction = async (
+  prev: any,
+  formData: FormData
+): Promise<{ status: "success" | "error"; message: string }> => {
+  const supabase = await createClient();
+  const goalId = formData.get("goalId");
+  const roadmapId = formData.get("roadmapId");
+
+  try {
+    const res = await supabase.from("goals").delete().eq("id", goalId);
+    console.log(res);
+    revalidatePath(`/roadmaps/${roadmapId}`);
+    return { status: "success", message: "Goal deleted successfully!" };
   } catch (error) {
     return renderError(error);
   }
