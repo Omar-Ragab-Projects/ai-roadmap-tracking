@@ -21,8 +21,6 @@ export default function ConfirmButton({
   values?: Record<string, string | number | boolean>;
   onSuccess?: () => void;
 }) {
-  // Optional client-side callback invoked when the action returns success.
-  // Useful to call `router.push(...)` or `router.refresh()` from the caller.
   const [showConfirm, setShowConfirm] = useState(false);
   const showConfirmation = () => setShowConfirm(true);
   const hideConfirmation = () => setShowConfirm(false);

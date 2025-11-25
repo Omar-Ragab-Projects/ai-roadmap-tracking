@@ -95,6 +95,10 @@ body {
   p {
     @apply text-text text-sm mt-1;
   }
+
+  button:focus {
+    @apply outline-2 outline-primary/30;
+  }
 }
 
 @layer components {

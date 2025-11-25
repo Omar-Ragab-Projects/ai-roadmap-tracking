@@ -1,16 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-
-const renderError = (
-  error: any
-): { status: "success" | "error"; message: string } => {
-  if (error instanceof Error) {
-    return { status: "error", message: error.message };
-  } else {
-    return { status: "error", message: "An error occured!" };
-  }
-};
+import renderError from "@/utils/renderError";
 
 export const addRoadmapAction = async (
   prev: any,
@@ -77,5 +68,30 @@ export const deleteRoadmapAction = async (
     return { status: "success", message: "Roadmap deleted successfully!" };
   } catch (error) {
     return renderError(error);
+  }
+};
+
+export const fetchRoadmap = async (roadmapId: string) => {
+  const supabase = await createClient();
+  const roadmapQuery = supabase
+    .from("roadmaps")
+    .select("*")
+    .eq("id", roadmapId)
+    .single();
+  const goalQuery = supabase
+    .from("goals")
+    .select("*")
+    .eq("roadmap_id", roadmapId)
+    .order("priority", { ascending: true });
+
+  try {
+    const [roadmapRes, goalsRes] = await Promise.all([roadmapQuery, goalQuery]);
+    const data = {
+      ...roadmapRes.data,
+      goals: goalsRes.data,
+    };
+    return data;
+  } catch (error) {
+    renderError(error);
   }
 };

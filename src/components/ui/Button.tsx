@@ -10,6 +10,7 @@ interface ButtonProps {
   type?: "button" | "submit";
   disabled?: boolean;
   loading?: boolean;
+  onClick?: () => void;
 }
 
 export default function Button({
@@ -20,6 +21,7 @@ export default function Button({
   type = "submit",
   disabled = false,
   loading = false,
+  onClick,
 }: ButtonProps) {
   const buttonClassname = () => {
     let joinClasses = `flex-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all font-semibold ${className} `;
@@ -43,7 +45,12 @@ export default function Button({
   };
 
   return (
-    <button type={type} disabled={disabled} className={buttonClassname()}>
+    <button
+      onClick={onClick}
+      type={type}
+      disabled={disabled}
+      className={buttonClassname()}
+    >
       {loading && <Loader2 size={16} className="animate-spin" />}
       {!loading && Icon && <Icon size={16} />}
       {!loading && title && <span>{title}</span>}
