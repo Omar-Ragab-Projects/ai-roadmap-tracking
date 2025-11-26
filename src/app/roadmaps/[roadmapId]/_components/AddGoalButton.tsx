@@ -29,7 +29,7 @@ export default function AddGoalButton({ roadmapId }: { roadmapId: number }) {
       {showAddGoal && (
         <>
           {createPortal(
-            <div className="fixed inset-0 bg-black/40 bg-opacity-50 z-50">
+            <div className="fixed inset-0 bg-black/40 bg-opacity-50 z-1000">
               <AddGoalForm
                 hideAddGoalForm={hideAddGoalForm}
                 roadmapId={roadmapId}

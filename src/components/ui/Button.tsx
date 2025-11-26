@@ -1,3 +1,4 @@
+"use client";
 import { Loader, Loader2, LucideProps } from "lucide-react";
 
 interface ButtonProps {

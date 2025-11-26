@@ -43,6 +43,7 @@
   --font-mono: var(--font-geist-mono);
   --animate-move-left: move-left 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
   --animate-move-down: move-down 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  --animate-fadein: fadein 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -119,6 +120,45 @@ body {
 
   .card {
     @apply p-4  rounded-lg shadow-[0px_1px_6px_rgba(0,0,0,0.12)];
+  }
+}
+
+/* Scrollbar */
+
+.scroll-bar-styles {
+  --sb-track-color: transparent;
+  --sb-thumb-color: #5554b6;
+  --sb-size: 4px;
+}
+
+.scroll-bar-styles::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+.scroll-bar-styles::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 10px;
+}
+
+.scroll-bar-styles::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 10px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .scroll-bar-styles {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
+}
+
+/* End Scrollbar */
+
+@keyframes fadein {
+  0% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
   }
 }
 

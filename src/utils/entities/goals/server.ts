@@ -65,6 +65,7 @@ export const updateGoalStatus = async (
       .update({ status })
       .eq("id", goalId);
     console.log(res);
+    revalidatePath(`/roadmaps/${goalId}`);
     return { status: "success", message: "Goal status updated successfully!" };
   } catch (error) {
     return renderError(error);

@@ -1,20 +1,16 @@
 "use client";
-
-import FormProvider from "@/components/global/form/FormProvider";
-import SubmitButton from "@/components/global/form/SubmitButton";
 import Button from "@/components/ui/Button";
 import ConfirmButton from "@/components/ui/ConfirmButton";
 import { Roadmap } from "@/types/roadmap";
 import { fetchRoadmaps } from "@/utils/entities/roadmaps/client";
-import {
-  deleteRoadmapAction,
-  updateRoadmapAction,
-} from "@/utils/entities/roadmaps/server";
+import { deleteRoadmapAction } from "@/utils/entities/roadmaps/server";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Loader2, Pencil, Save, Trash2 } from "lucide-react";
+import { ArrowLeft, Loader2, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import EditRoadmapForm from "./EditRoadmapForm";
+import GoalsProgressBar from "./GoalsProgressBar";
+import Loader from "@/components/ui/Loader";
 
 export default function RoadmapsList() {
   const { data, error, isLoading, refetch } = useQuery({
@@ -27,16 +23,9 @@ export default function RoadmapsList() {
 
   if (error) return <div>Error loading roadmaps.</div>;
 
-  const roadmaps: Roadmap[] = data?.data || [];
-  const completedPercent = 70;
-  console.log(roadmaps);
+  const roadmaps: Roadmap[] = data || [];
 
-  if (isLoading)
-    return (
-      <div className="w-full h-[300px] flex-center">
-        <Loader2 size={26} className="animate-spin text-primary" />
-      </div>
-    );
+  if (isLoading) return <Loader />;
 
   if (roadmaps.length === 0)
     return (
@@ -90,33 +79,20 @@ export default function RoadmapsList() {
               </ConfirmButton>
             </div>
           </div>
-          {/* Progress Bar */}
-          <div className="mt-6">
-            {/* Percentage Count */}
-            <div className="flex-between">
-              <span className="text-sm text-foreground">Progress</span>
-              <span className="text-primary font-bold">
-                {completedPercent}%
-              </span>
-            </div>
-            {/* Percentage Bar */}
-            <div className="relative h-4 rounded-full bg-muted mt-2">
-              <span
-                className={`absolute percentage-bar left-0 h-full transition-all rounded-full bg-linear-to-r from-primary to-secondary`}
-                style={{
-                  width: `${completedPercent}%`,
-                }}
-              />
-            </div>
-            {/* Goals Count */}
-            <div className="flex gap-4 mt-3">
-              <span className="text-sm text-text">
-                Goals: <b className="text-primary">5</b>
-              </span>
-              <span className="text-sm text-text">
-                Completed: <b className="text-secondary">1</b>
-              </span>
-            </div>
+          <GoalsProgressBar roadmap={roadmap} />
+          {/* Goals Count */}
+          <div className="flex gap-4 mt-3">
+            <span className="text-sm text-text">
+              Goals:{" "}
+              <b className="text-primary">{roadmap.goals?.length || 0}</b>
+            </span>
+            <span className="text-sm text-text">
+              Completed:{" "}
+              <b className="text-secondary">
+                {roadmap.goals?.filter((goal) => goal.status == "done")
+                  .length || 0}
+              </b>
+            </span>
           </div>
           {/* View Goals */}
           <Link href={`/roadmaps/${roadmap.id}`}>

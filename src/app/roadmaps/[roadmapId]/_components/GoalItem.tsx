@@ -5,8 +5,11 @@ import { Trash2 } from "lucide-react";
 import ConfirmButton from "@/components/ui/ConfirmButton";
 import { deleteGoalAction } from "@/utils/entities/goals/server";
 import AddGoalButton from "./AddGoalButton";
+import { Goal, GoalStatus } from "@/types/roadmap";
 
-export default function GoalItem({ goal }: { goal?: any }) {
+export default function GoalItem({ goal }: { goal?: Goal }) {
+  if (!goal) return null;
+
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: goal.id });
 
@@ -27,19 +30,37 @@ export default function GoalItem({ goal }: { goal?: any }) {
         return "text-text text-muted";
     }
   };
+
+  const getStatusStyles = (status: GoalStatus) => {
+    switch (status) {
+      case "todo":
+        return "bg-primary/10 hover:bg-[#d7d7e5]! border-2 border-dotted border-primary/15 ";
+      case "inprogress":
+        return "bg-foreground/8 hover:bg-[#d6d6d6]! border-2 border-dotted border-foreground/15  ";
+      case "done":
+        return "bg-secondary/10  hover:bg-[#cadfe0]! border-2 border-dotted border-secondary/15 ";
+      default:
+        return "text-text text-muted";
+    }
+  };
+
   return (
     <li
-      className="cursor-grab list-none bg-[#dedee8] hover:bg-[#e2e2e2] active:bg-[#d4d4dd] active:opacity-40 rounded-lg p-6 mb-3"
+      className={`cursor-grab list-none bg-[#dedee8] hover:bg-[#e2e2e2] active:bg-[#d4d4dd] active:opacity-40 rounded-lg p-6 mb-3 ${getStatusStyles(
+        goal.status
+      )}`}
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
     >
       {/* ... */}
-      <div className="flex justify-between">
+      <div className="flex justify-between items-start">
         <div>
           <h4 className="font-medium">{goal.name}</h4>
-          <p className="text-text">{goal.description || "-"}</p>
+          <p className="text-text whitespace-break-spaces">
+            {goal.description || "-"}
+          </p>
           <span
             className={`${getPriorityStyles(
               goal.priority
@@ -56,8 +77,8 @@ export default function GoalItem({ goal }: { goal?: any }) {
           }}
         >
           <Trash2
-            size={18}
-            className="text-red-400 cursor-pointer w-8 h-8 hover:text-red-500 p-2"
+            size={14}
+            className="text-red-300 cursor-pointer w-8 h-8 hover:text-red-400 transition p-2"
           />
         </ConfirmButton>
         {/* <AddGoalButton roadmapId={goal.roadmap_id} /> */}

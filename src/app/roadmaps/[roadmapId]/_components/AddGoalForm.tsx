@@ -3,7 +3,8 @@ import FormProvider from "@/components/global/form/FormProvider";
 import SubmitButton from "@/components/global/form/SubmitButton";
 import { addGoalAction } from "@/utils/entities/goals/server";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
 
 const priorityOptions = [
   { color: "#afaeb4", value: "low", label: "Low" },

@@ -10,10 +10,11 @@ import {
   DragOverlay,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SortableContainer from "./dnd/SortableContainer";
 import GoalItem from "./GoalItem";
 import { updateGoalStatus } from "@/utils/entities/goals/server";
+import { GoalsContext } from "../context/GoalsContextProvider";
 
 interface GloalsListTypes {
   todo: Goal[];
@@ -30,6 +31,7 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
 
   // console.log(goals);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const { setGoalsUpdating } = useContext(GoalsContext);
 
   useEffect(() => {
     if (roadmap.goals) {
@@ -45,7 +47,7 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
         done: doneGoals || [],
       });
     }
-  }, [roadmap]);
+  }, [roadmap.goals?.length]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -112,6 +114,7 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
         return box;
       });
       updateGoalStatus(active.id, overContainer);
+      setGoalsUpdating(true);
     }
   }
 
@@ -122,8 +125,12 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
     setActiveId(id);
   }
 
+  function findGoalById(id: string): Goal | undefined {
+    return roadmap.goals && roadmap.goals.find((goal) => goal.id === +id);
+  }
+
   return (
-    <div className="mt-10 grid grid-cols-3 gap-4">
+    <div className="mt-10 flex gap-3 ">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -131,17 +138,17 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
         onDragEnd={handleDragEnd}
       >
         <SortableContainer id="todo" items={goals.todo} title="Todo" />
+        <span></span>
         <SortableContainer
           id="inprogress"
           items={goals.inprogress}
           title="In Progress"
         />
+        <span></span>
         <SortableContainer id="done" items={goals.done} title="Done" />
         <DragOverlay>
-          {activeId && roadmap?.goals ? (
-            <GoalItem
-              goal={roadmap.goals.find((goal) => goal.id == +activeId)}
-            />
+          {activeId && roadmap.goals ? (
+            <GoalItem goal={findGoalById(activeId)} />
           ) : null}
         </DragOverlay>
       </DndContext>

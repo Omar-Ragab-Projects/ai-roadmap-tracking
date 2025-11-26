@@ -43,7 +43,7 @@ export default function ConfirmButton({
     <>
       {showConfirm ? (
         createPortal(
-          <div className="fixed inset-0 bg-black/40 bg-opacity-50 z-50">
+          <div className="fixed inset-0 bg-black/40 bg-opacity-50 z-1000">
             <FormProvider
               className="absolute confirm-form top-[10%] animate-move-down left-center w-[500px] max-w-[90%]  flex-center flex-col bg-white p-6 rounded shadow-md"
               action={onConfirm}
