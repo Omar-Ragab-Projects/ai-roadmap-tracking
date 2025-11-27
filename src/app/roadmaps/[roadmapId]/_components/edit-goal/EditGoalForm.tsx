@@ -1,10 +1,10 @@
 import FormGroup from "@/components/global/form/FormGroup";
 import FormProvider from "@/components/global/form/FormProvider";
 import SubmitButton from "@/components/global/form/SubmitButton";
-import { addGoalAction } from "@/utils/entities/goals/server";
+import { Goal } from "@/types/roadmap";
+import { updateGoalAction } from "@/utils/entities/goals/server";
 import { X } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useEffect, useState } from "react";
 
 const priorityOptions = [
   { color: "#afaeb4", value: "low", label: "Low" },
@@ -13,43 +13,74 @@ const priorityOptions = [
 ];
 
 export default function AddGoalForm({
-  hideAddGoalForm,
-  roadmapId,
+  hideEditRoadmap,
+  goal,
 }: {
-  hideAddGoalForm: () => void;
-  roadmapId: string | number;
+  hideEditRoadmap: () => void;
+  goal: Goal;
 }) {
   const [priority, setPriority] = useState("medium");
 
+  useEffect(() => {
+    if (goal.priority) {
+      setPriority(goal.priority);
+    }
+  }, [goal.priority]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!(event.target as HTMLElement).closest(".edit-goal-form")) {
+        hideEditRoadmap();
+      }
+    };
+
+    document.body.addEventListener("click", handleClickOutside);
+    return () => document.body.removeEventListener("click", handleClickOutside);
+  }, []);
+
   return (
     <FormProvider
-      className="absolute add-goal-form top-[10%] animate-move-down left-center w-[500px] max-w-[90%] flex flex-col bg-white p-6 rounded shadow-md"
-      action={addGoalAction}
-      onSuccess={hideAddGoalForm}
+      className="absolute edit-goal-form top-[10%] animate-move-down left-center w-[500px] max-w-[90%] flex flex-col bg-white p-6 rounded shadow-md"
+      action={updateGoalAction}
+      onSuccess={hideEditRoadmap}
     >
       <X
         onClick={(e) => {
-          hideAddGoalForm();
+          hideEditRoadmap();
           e.stopPropagation();
         }}
         size={20}
         className="absolute right-4 top-4 text-text/80 hover:text-text/60 cursor-pointer"
       />
       <p className="text-xl text-primary/80 text-center font-semibold mb-3 mt-6 text-shadow-md">
-        Add new goal to current roadmap
+        Edit goal in current roadmap
       </p>
-      <input type="text" name="roadmapId" defaultValue={roadmapId} hidden />
+      <input
+        type="text"
+        name="roadmapId"
+        defaultValue={goal.roadmap_id}
+        hidden
+      />
+      <input
+        type="text"
+        name="roadmapId"
+        defaultValue={goal.roadmap_id}
+        hidden
+      />
+      <input type="text" name="goalId" defaultValue={goal.id} hidden />
       <FormGroup
         label={"Title"}
         name={"name"}
         placeholder="Learn HTML..."
         required
+        defaultValue={goal.name}
       />
       <FormGroup
         textarea
         label={"Description"}
         name={"description"}
         placeholder="Watch 4 hours daily of Elzero course..."
+        defaultValue={goal.description || ""}
       />
       <div className="mt-6 flex items-center gap-4">
         <label>Priority:</label>
@@ -82,7 +113,10 @@ export default function AddGoalForm({
           ))}
         </div>
       </div>
-      <SubmitButton title={"Add Goal"} className="mt-6 min-w-[200px] text-sm" />
+      <SubmitButton
+        title={"Edit Goal"}
+        className="mt-6 min-w-[200px] text-sm"
+      />
     </FormProvider>
   );
 }

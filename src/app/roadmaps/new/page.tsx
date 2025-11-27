@@ -7,6 +7,7 @@ import Link from "next/link";
 import FormProvider from "@/components/global/form/FormProvider";
 import { redirect } from "next/navigation";
 import { addRoadmapAction } from "@/utils/entities/roadmaps/server";
+import BackTo from "@/components/ui/BackTo";
 
 export default async function CreateRoadmapPage() {
   const onSuccess = async () => {
@@ -16,9 +17,7 @@ export default async function CreateRoadmapPage() {
   return (
     <div className="pt-18 w-1/2 mx-auto">
       <header>
-        <Link href="/roadmaps">
-          <Button Icon={ArrowLeft} title="Back" varient="skeleton" />
-        </Link>
+        <BackTo href="/roadmaps" />
         <IconTitle
           className="mt-6 "
           Icon={Blocks}

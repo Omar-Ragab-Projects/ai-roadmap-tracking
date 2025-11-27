@@ -42,7 +42,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --animate-move-left: move-left 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
-  --animate-move-down: move-down 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  --animate-move-down: move-down 0.2s ease-out both;
   --animate-fadein: fadein 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
@@ -104,7 +104,7 @@ body {
 
 @layer components {
   .tooltip {
-    @apply absolute top-center left-[calc(100%+0.8rem)] bg-[#f6f6f6] text-sidebar rounded-lg px-3 py-2 text-sm w-max;
+    @apply absolute top-center left-[calc(100%+0.8rem)] bg-primary text-white rounded-lg px-3 py-2 text-sm w-max;
   }
 
   .tooltip::after {
@@ -115,7 +115,7 @@ body {
     transform: translateY(-50%);
     border: 12px solid transparent;
     border-right-width: 8px;
-    border-right-color: #f6f6f6;
+    border-right-color: var(--primary);
   }
 
   .card {
@@ -175,8 +175,8 @@ body {
 
 @keyframes move-down {
   0% {
-    transform: translateY(-100%);
-    opacity: 0;
+    transform: translateY(-5%);
+    opacity: 0.6;
   }
   100% {
     transform: translateY(0);

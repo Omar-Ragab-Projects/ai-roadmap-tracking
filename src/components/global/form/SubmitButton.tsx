@@ -20,7 +20,7 @@ export default function SubmitButton({
 
   return (
     <Button
-      className={`flex-1 p-3! ${className}`}
+      className={`flex-1 p-3 ${className}`}
       disabled={pending}
       loading={pending}
       type="submit"

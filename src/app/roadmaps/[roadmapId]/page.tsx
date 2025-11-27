@@ -1,6 +1,6 @@
 import BackTo from "@/components/ui/BackTo";
 import { fetchRoadmapCache } from "@/utils/entities/roadmaps/server";
-import AddGoalButton from "./_components/AddGoalButton";
+import AddGoalButton from "./_components/add-goal/AddGoalButton";
 import GoalsList from "./_components/GoalsList";
 import { redirect } from "next/navigation";
 import { Roadmap } from "@/types/roadmap";

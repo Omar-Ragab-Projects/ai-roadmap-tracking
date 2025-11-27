@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/client";
 
 const supabase = createClient();
 
-export const fetchRoadmaps = async () => {
+export const fetchRoadmapsClient = async () => {
   const roadmapsQuery = supabase
     .from("roadmaps")
     .select("*")

@@ -1,14 +1,19 @@
-import React from "react";
+import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import ConfirmButton from "@/components/ui/ConfirmButton";
 import { deleteGoalAction } from "@/utils/entities/goals/server";
-import AddGoalButton from "./AddGoalButton";
 import { Goal, GoalStatus } from "@/types/roadmap";
+import { createPortal } from "react-dom";
+import EditGoalForm from "./edit-goal/EditGoalForm";
 
 export default function GoalItem({ goal }: { goal?: Goal }) {
   if (!goal) return null;
+
+  const [editRoadmap, setEditRoadmap] = useState<number | null>(null);
+  const showEditRoadmap = (roadmapId: number) => setEditRoadmap(roadmapId);
+  const hideEditRoadmap = () => setEditRoadmap(null);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: goal.id });
@@ -46,7 +51,7 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
 
   return (
     <li
-      className={`cursor-grab list-none bg-[#dedee8] hover:bg-[#e2e2e2] active:bg-[#d4d4dd] active:opacity-40 rounded-lg p-6 mb-3 ${getStatusStyles(
+      className={`group cursor-grab list-none bg-[#dedee8] hover:bg-[#e2e2e2] active:bg-[#d4d4dd] active:opacity-40 rounded-lg p-6 mb-3 ${getStatusStyles(
         goal.status
       )}`}
       ref={setNodeRef}
@@ -57,10 +62,29 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
       {/* ... */}
       <div className="flex justify-between items-start">
         <div>
-          <h4 className="font-medium">{goal.name}</h4>
-          <p className="text-text whitespace-break-spaces">
-            {goal.description || "-"}
-          </p>
+          {/* Title & Description */}
+          {editRoadmap == goal.id ? (
+            <>
+              {createPortal(
+                <div
+                  onPointerDown={(e) => {
+                    e.stopPropagation();
+                  }}
+                  className="fixed inset-0 bg-black/40 bg-opacity-50 z-1000"
+                >
+                  <EditGoalForm hideEditRoadmap={hideEditRoadmap} goal={goal} />
+                </div>,
+                document.body
+              )}
+            </>
+          ) : (
+            <>
+              <h4 className="font-medium">{goal.name}</h4>
+              <p className="text-text whitespace-break-spaces">
+                {goal.description || "-"}
+              </p>
+            </>
+          )}
           <span
             className={`${getPriorityStyles(
               goal.priority
@@ -69,19 +93,33 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
             {goal.priority}
           </span>
         </div>
-        <ConfirmButton
-          onConfirm={deleteGoalAction}
-          values={{
-            goalId: goal.id,
-            roadmapId: goal.roadmap_id,
+
+        {/* Controllers */}
+        <div
+          onPointerDown={(e) => {
+            e.stopPropagation();
           }}
+          className="flex-center gap-2 "
         >
-          <Trash2
+          <Pencil
+            onClick={() => showEditRoadmap(goal.id)}
             size={14}
-            className="text-red-300 cursor-pointer w-8 h-8 hover:text-red-400 transition p-2"
+            className="opacity-0 group-hover:opacity-100 cursor-pointer w-7 h-7 p-1 text-primary/75 hover:text-primary transition"
           />
-        </ConfirmButton>
-        {/* <AddGoalButton roadmapId={goal.roadmap_id} /> */}
+          <ConfirmButton
+            onConfirm={deleteGoalAction}
+            confirmTitle="Delete"
+            values={{
+              goalId: goal.id,
+              roadmapId: goal.roadmap_id,
+            }}
+          >
+            <Trash2
+              size={14}
+              className="opacity-0 group-hover:opacity-100 cursor-pointer w-7 h-7 p-1 text-red-400 hover:text-red-500 transition"
+            />
+          </ConfirmButton>
+        </div>
       </div>
     </li>
   );

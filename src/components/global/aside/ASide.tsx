@@ -2,15 +2,19 @@
 import { routes } from "@/lib/routes";
 import { Plus, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SmallView from "./components/SmallView";
 
 export default function ASide() {
-  const [activePath, setActivePath] = useState("/");
+  const [activePath, setActivePath] = useState("");
   const [smallView, setSmallView] = useState(false);
   const toggleView = () => setSmallView(!smallView);
 
   const isActivePath = (path: string) => activePath == path;
+
+  useEffect(() => {
+    setActivePath("/" + window.location.pathname.split("/")[1] || "/");
+  }, []);
 
   return (
     <aside

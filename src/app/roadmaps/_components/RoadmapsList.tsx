@@ -2,7 +2,7 @@
 import Button from "@/components/ui/Button";
 import ConfirmButton from "@/components/ui/ConfirmButton";
 import { Roadmap } from "@/types/roadmap";
-import { fetchRoadmaps } from "@/utils/entities/roadmaps/client";
+import { fetchRoadmapsClient } from "@/utils/entities/roadmaps/client";
 import { deleteRoadmapAction } from "@/utils/entities/roadmaps/server";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Loader2, Pencil, Trash2 } from "lucide-react";
@@ -15,7 +15,7 @@ import Loader from "@/components/ui/Loader";
 export default function RoadmapsList() {
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["roadmaps"],
-    queryFn: fetchRoadmaps,
+    queryFn: fetchRoadmapsClient,
   });
   const [editRoadmap, setEditRoadmap] = useState<number | null>(null);
   const showEditRoadmap = (roadmapId: number) => setEditRoadmap(roadmapId);

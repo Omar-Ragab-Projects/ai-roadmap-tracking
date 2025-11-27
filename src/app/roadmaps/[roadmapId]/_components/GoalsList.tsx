@@ -29,7 +29,6 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
     done: [],
   });
 
-  // console.log(goals);
   const [activeId, setActiveId] = useState<string | null>(null);
   const { setGoalsUpdating } = useContext(GoalsContext);
 
@@ -47,7 +46,7 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
         done: doneGoals || [],
       });
     }
-  }, [roadmap.goals?.length]);
+  }, [roadmap.goals]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),

@@ -36,6 +36,35 @@ export const addGoalAction = async (
   }
 };
 
+export const updateGoalAction = async (
+  prev: any,
+  formData: FormData
+): Promise<{ status: "success" | "error"; message: string }> => {
+  const supabase = await createClient();
+  const goalId = formData.get("goalId");
+  const roadmapId = formData.get("roadmapId");
+  const name = formData.get("name");
+  const description = formData.get("description");
+  const priority = formData.get("priority");
+
+  if (!name) return { status: "error", message: "Please add goal title." };
+
+  const data = {
+    name,
+    description,
+    priority: priority || "medium",
+  };
+
+  try {
+    const res = await supabase.from("goals").update(data).eq("id", goalId);
+    console.log(res);
+    revalidatePath(`/roadmaps/${roadmapId}`);
+    return { status: "success", message: "Goal updated successfully!" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
 export const deleteGoalAction = async (
   prev: any,
   formData: FormData
