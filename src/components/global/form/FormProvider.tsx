@@ -10,6 +10,7 @@ interface FormProviderProps {
   ) => Promise<{ status: "success" | "error"; message: string }>;
   className?: string;
   onSuccess?: () => void;
+  ref?: React.Ref<HTMLFormElement> | undefined;
 }
 
 const initState = { message: "", status: "" as "success" | "error" };
@@ -19,6 +20,7 @@ export default function FormProvider({
   action,
   className = "",
   onSuccess,
+  ref = undefined,
 }: FormProviderProps) {
   const [state, formAction, isPending] = useActionState(action, initState);
   const { setMessage } = useContext(ToastContext);
@@ -33,7 +35,7 @@ export default function FormProvider({
     }
   }, [state]);
   return (
-    <form action={formAction} className={className}>
+    <form ref={ref} action={formAction} className={className}>
       {children}
     </form>
   );

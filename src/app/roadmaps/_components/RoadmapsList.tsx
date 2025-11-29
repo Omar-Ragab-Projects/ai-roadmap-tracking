@@ -5,7 +5,7 @@ import { Roadmap } from "@/types/roadmap";
 import { fetchRoadmapsClient } from "@/utils/entities/roadmaps/client";
 import { deleteRoadmapAction } from "@/utils/entities/roadmaps/server";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Loader2, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import EditRoadmapForm from "./EditRoadmapForm";
@@ -95,13 +95,12 @@ export default function RoadmapsList() {
             </span>
           </div>
           {/* View Goals */}
-          <Link href={`/roadmaps/${roadmap.id}`}>
-            <Button
-              Icon={ArrowLeft}
-              title={"View Goals"}
-              className="w-[200px] ms-auto mt-4"
-            />
-          </Link>
+          <Button
+            href={`/roadmaps/${roadmap.id}`}
+            Icon={ArrowRight}
+            title={"View Goals"}
+            className="w-fit ms-auto mt-4 flex-row-reverse"
+          />
         </li>
       ))}
     </ul>

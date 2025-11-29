@@ -21,6 +21,8 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
       roadmap.goals?.filter((goal) => goal.status == "done").length || 0,
   }));
 
+  console.log("Chart data:", data);
+
   const redirectToRoadmapByIndex = (index: number) => {
     if (!index) return;
     const roadmap = roadmaps[index];
@@ -61,7 +63,7 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
         <Tooltip />
         <Legend />
         <Bar dataKey="completed" stackId="a" fill="#008994" background />
-        <Bar dataKey="total" stackId="a" fill="#d5e4e5" background />
+        <Bar dataKey="total" stackId="b" fill="#9bcbcf" background />
       </BarChart>
     </div>
   );

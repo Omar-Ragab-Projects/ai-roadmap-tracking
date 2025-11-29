@@ -1,6 +1,5 @@
 import Button from "@/components/ui/Button";
 import PageTitle from "@/components/ui/PageTitle";
-import Link from "next/link";
 import RoadmapsList from "./_components/RoadmapsList";
 
 export default function RoadmapsPage() {
@@ -11,9 +10,7 @@ export default function RoadmapsPage() {
           title="Learning Roadmaps"
           description="Create and manage your learning paths"
         />
-        <Link href="/roadmaps/new">
-          <Button title={"+ New Roadmap"} />
-        </Link>
+        <Button href="/roadmaps/new" title={"+ New Roadmap"} />
       </header>
 
       <section>

@@ -46,14 +46,13 @@ export default async function CreateRoadmapPage() {
           placeholder="Describe your learning goals and what you want to achieve..."
         />
         <div className="flex gap-3 mt-6 pt-6 border-t border-border">
-          <Link href="/roadmaps" className="flex-1">
-            <Button
-              className="w-full p-3!"
-              title={"Cancel"}
-              varient={"cancel"}
-              type="button"
-            />
-          </Link>
+          <Button
+            href="/roadmaps"
+            className="w-full p-3! flex-1"
+            title={"Cancel"}
+            varient={"ghost"}
+            type="button"
+          />
 
           <SubmitButton title="Create Roadmap" />
         </div>

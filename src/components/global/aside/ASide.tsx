@@ -18,7 +18,7 @@ export default function ASide() {
 
   return (
     <aside
-      className={`h-lvh bg-sidebar text-background flex flex-col sticky top-0
+      className={`h-lvh bg-sidebar text-background flex flex-col sticky top-0 z-100
     ${smallView ? "w-[100px] transition-all duration-300" : "w-[250px]"}`}
     >
       <div className="p-6 border-b border-sidebar-border relative">
@@ -62,10 +62,13 @@ export default function ASide() {
       </nav>
 
       <div className="p-4 border-b border-t border-sidebar-border">
-        <button className="w-full bg-accent text-sidebar px-4 py-2 rounded-lg flex-center gap-1 font-semibold tracking-wide cursor-pointer hover:bg-accent/90 transition text-sm">
+        <Link
+          href="/roadmaps/new"
+          className="w-full bg-accent text-sidebar px-4 py-2 rounded-lg flex-center gap-1 font-semibold tracking-wide cursor-pointer hover:bg-accent/90 transition text-sm"
+        >
           <Plus size={18} />
           {!smallView && <span>New Roadmap</span>}
-        </button>
+        </Link>
       </div>
 
       <div

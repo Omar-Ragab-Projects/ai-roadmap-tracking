@@ -102,6 +102,10 @@ body {
   }
 }
 
+.ai-chat-textarea {
+  @apply min-h-[50px] max-h-[150px] resize-none! outline-0 hover:shadow-none focus:shadow-none;
+}
+
 @layer components {
   .tooltip {
     @apply absolute top-center left-[calc(100%+0.8rem)] bg-primary text-white rounded-lg px-3 py-2 text-sm w-max;
@@ -110,7 +114,7 @@ body {
   .tooltip::after {
     content: "";
     position: absolute;
-    right: 100%;
+    right: 99%;
     top: 50%;
     transform: translateY(-50%);
     border: 12px solid transparent;
