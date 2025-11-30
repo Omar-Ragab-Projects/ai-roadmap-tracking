@@ -65,7 +65,7 @@ export const deleteRoadmapAction = async (
     return { status: "error", message: "Roadmap does not exist." };
 
   try {
-    const res = await supabase.from("roadmaps").delete().eq("id", roadmapId);
+    await supabase.from("roadmaps").delete().eq("id", roadmapId);
     return { status: "success", message: "Roadmap deleted successfully!" };
   } catch (error) {
     return renderError(error);

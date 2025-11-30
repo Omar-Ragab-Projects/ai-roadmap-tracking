@@ -97,6 +97,14 @@ body {
     @apply text-text text-sm mt-1;
   }
 
+  pre {
+    @apply whitespace-pre-line!;
+  }
+
+  select {
+    @apply border border-primary/30 rounded-lg px-2 py-1 outline-0 focus:outline-1 focus:outline-primary/50 text-xs text-black/75;
+  }
+
   button:focus {
     @apply outline-2 outline-primary/30;
   }

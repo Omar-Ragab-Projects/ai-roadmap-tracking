@@ -29,7 +29,7 @@ export default function ChatForm({
         onKeyDown={hitEnterHandler}
         name="userContent"
       />
-      <div className="px-4 pb-4">
+      <div className="px-4 pb-4 flex-between">
         <div className="flex items-baseline gap-4">
           <Button
             type="submit"
@@ -51,6 +51,14 @@ export default function ChatForm({
           <span className="text-[10px] text-text opacity-70">
             {process.env.NEXT_PUBLIC_MODEL_VERSION}
           </span>
+        </div>
+
+        <div>
+          <select name="roadmap" id="">
+            <option value="">Default (Not specific roadmap)</option>
+            <option value="option2">Learning Roadmap 2</option>
+            <option value="option3">Learning Roadmap 3</option>
+          </select>
         </div>
       </div>
     </FormProvider>

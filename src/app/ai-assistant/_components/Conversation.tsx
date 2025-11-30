@@ -1,14 +1,13 @@
 import ReactMarkdown from "react-markdown";
-import { ChatDataTypes, chatTypes } from "@/lib/types";
-import { get } from "http";
+import { chatTypes } from "@/lib/types";
 
 export default function Conversation({
   chatData,
-  lastAiContent,
+  lastAiMessageStream,
   loadingAiResponse,
 }: {
   chatData: chatTypes[];
-  lastAiContent: string;
+  lastAiMessageStream: string;
   loadingAiResponse?: boolean;
 }) {
   const getTextFromParts = (parts: chatTypes["parts"]) => {
@@ -16,6 +15,11 @@ export default function Conversation({
   };
   return (
     <div className="mt-8">
+      {!chatData.length && (
+        <p className="text-center text-muted-foreground/40 text-sm">
+          Start the conversation by typing your message below.
+        </p>
+      )}
       {chatData.map((chat, index) => {
         const isUserMessage = chat.role === "user";
         const isAiMessage = chat.role === "model";
@@ -35,7 +39,7 @@ export default function Conversation({
           return (
             <div key={index}>
               <div
-                className={` p-4 rounded-lg lg:max-w-[900px] mt-2 whitespace-break-spaces`}
+                className={` p-4 rounded-lg lg:max-w-[90%]  mt-2 whitespace-break-spaces`}
               >
                 <ReactMarkdown
                   components={{
@@ -54,14 +58,14 @@ export default function Conversation({
           <div
             className={`${
               loadingAiResponse ? "" : ""
-            } p-4 rounded-lg lg:max-w-[900px] mt-2 whitespace-break-spaces last-ai-content`}
+            } p-4 rounded-lg lg:max-w-[90%] mt-2 whitespace-break-spaces last-ai-content`}
           >
             <ReactMarkdown
               components={{
                 p: "span",
               }}
             >
-              {lastAiContent}
+              {lastAiMessageStream}
             </ReactMarkdown>
           </div>
         </div>
