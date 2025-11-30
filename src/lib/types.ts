@@ -4,3 +4,8 @@ export interface ChatDataTypes {
   aiContent: string;
   aiPendingResponse: boolean;
 }
+
+export interface chatTypes {
+  role: string;
+  parts: { text: string }[];
+}
