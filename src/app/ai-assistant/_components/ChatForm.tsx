@@ -1,13 +1,16 @@
 import FormProvider from "@/components/global/form/FormProvider";
 import Button from "@/components/ui/Button";
+import { Roadmap } from "@/types/roadmap";
 import { Send } from "lucide-react";
-import { Ref, RefObject } from "react";
+import { Ref } from "react";
 
 export default function ChatForm({
   formRef,
   hitEnterHandler,
   sendAction,
   isLoading,
+  roadmaps,
+  selectRoadmap,
 }: {
   formRef: Ref<HTMLFormElement> | undefined;
   hitEnterHandler: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
@@ -16,6 +19,8 @@ export default function ChatForm({
     formData: FormData
   ) => Promise<{ status: "success" | "error"; message: string }>;
   isLoading: boolean;
+  roadmaps: Roadmap[] | undefined;
+  selectRoadmap: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }) {
   return (
     <FormProvider
@@ -54,10 +59,13 @@ export default function ChatForm({
         </div>
 
         <div>
-          <select name="roadmap" id="">
+          <select form="" name="roadmap" id="" onChange={selectRoadmap}>
             <option value="">Default (Not specific roadmap)</option>
-            <option value="option2">Learning Roadmap 2</option>
-            <option value="option3">Learning Roadmap 3</option>
+            {roadmaps?.map((roadmap) => (
+              <option key={roadmap.id} value={roadmap.id}>
+                {roadmap.title}
+              </option>
+            ))}
           </select>
         </div>
       </div>

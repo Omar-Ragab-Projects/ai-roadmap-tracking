@@ -31,7 +31,9 @@ export default function RootLayout({
       >
         <Providers>
           <ASide />
-          <main className="p-8 bg-background flex-1">{children}</main>
+          <main className="p-8 bg-background flex-1 overflow-auto">
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

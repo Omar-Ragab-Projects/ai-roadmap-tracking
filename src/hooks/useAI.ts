@@ -1,3 +1,4 @@
+import { Roadmap } from "@/types/roadmap";
 import { GoogleGenAI } from "@google/genai";
 import React, { useRef, useState } from "react";
 
@@ -32,13 +33,28 @@ export default function useAI(sessionId: string) {
     });
   };
 
-  async function getAiResponse(content: string) {
+  async function getAiResponse(
+    content: string,
+    selectedRoadmap: Roadmap | null
+  ) {
     setIsLoading(true);
+    let contentToSend = content;
     let text = "";
     let scrollTimes = 0;
     const maxScrollTimes = 3;
     const lastAiContentElement: HTMLElement | null =
       document.querySelector(".last-ai-content");
+
+    if (selectedRoadmap) {
+      contentToSend += `\n\n
+      You are an AI learning assistant helping a user based on their selected learning roadmap
+      with this data: ${JSON.stringify(selectedRoadmap)}.
+      `;
+    }
+
+    contentToSend += `\n\n
+    Provide clear and concise answers to help the user learn effectively.
+    `;
 
     // Add user message to history
     setHistory((pre) => [
@@ -51,7 +67,7 @@ export default function useAI(sessionId: string) {
 
     // Get AI response as stream
     const response = await chatSessionRef.current.sendMessageStream({
-      message: content,
+      message: contentToSend,
     });
 
     for await (const chunk of response) {

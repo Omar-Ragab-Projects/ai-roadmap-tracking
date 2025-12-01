@@ -1,9 +1,10 @@
 "use client";
+import { Roadmap } from "@/types/roadmap";
 import { createClient } from "@/utils/supabase/client";
 
 const supabase = createClient();
 
-export const fetchRoadmapsClient = async () => {
+export const fetchRoadmapsClient = async (): Promise<Roadmap[]> => {
   const roadmapsQuery = supabase
     .from("roadmaps")
     .select("*")

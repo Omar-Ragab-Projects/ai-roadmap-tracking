@@ -143,6 +143,10 @@ body {
   --sb-size: 4px;
 }
 
+.scroll-bar-styles:hover {
+  --sb-thumb-color: #3332a8;
+}
+
 .scroll-bar-styles::-webkit-scrollbar {
   width: var(--sb-size);
 }
