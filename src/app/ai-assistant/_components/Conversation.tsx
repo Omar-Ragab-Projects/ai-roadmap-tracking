@@ -71,11 +71,7 @@ export default function Conversation({
         </div>
       )}
 
-      <>
-        {loadingAiResponse && (
-          <div className="ms-4 mb-6 mt-4 h-4 w-4 border-2 border-dashed border-primary rounded-full animate-spin" />
-        )}
-      </>
+      <>{loadingAiResponse && <div className="ai-loading" />}</>
     </div>
   );
 }

@@ -21,7 +21,7 @@ export default function RecentGoals({ goals }: { goals: Goal[] }) {
   );
 
   return (
-    <div className="bg-white rounded-xl shadow-md border border-border p-6 ">
+    <div className="card">
       <h3>Recent Goals</h3>
       <p>Your latest achievements and in-progress goals</p>
 

@@ -35,7 +35,7 @@ export default function useAI(sessionId: string) {
 
   async function getAiResponse(
     content: string,
-    selectedRoadmap: Roadmap | null
+    selectedRoadmap?: Roadmap | null
   ) {
     setIsLoading(true);
     let contentToSend = content;
@@ -47,14 +47,11 @@ export default function useAI(sessionId: string) {
 
     if (selectedRoadmap) {
       contentToSend += `\n\n
-      You are an AI learning assistant helping a user based on their selected learning roadmap
+      You are an AI learning assistant helping a user based on their selected learning roadmap.
+      Provide clear and concise answers to help the user learn effectively.
       with this data: ${JSON.stringify(selectedRoadmap)}.
       `;
     }
-
-    contentToSend += `\n\n
-    Provide clear and concise answers to help the user learn effectively.
-    `;
 
     // Add user message to history
     setHistory((pre) => [

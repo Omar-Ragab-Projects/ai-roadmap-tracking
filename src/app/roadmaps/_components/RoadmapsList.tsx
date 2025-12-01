@@ -37,7 +37,7 @@ export default function RoadmapsList() {
   return (
     <ul className="grid md:grid-cols-2 gap-8 mt-10">
       {roadmaps.map((roadmap, index) => (
-        <li className="card group" key={roadmap.id}>
+        <li className="card group bg-white" key={roadmap.id}>
           {/* Roadmap Card Header */}
           <div className="flex-between">
             {/* Title & Description */}

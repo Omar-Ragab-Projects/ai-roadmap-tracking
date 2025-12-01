@@ -24,7 +24,7 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
   console.log("Chart data:", data);
 
   const redirectToRoadmapByIndex = (index: number) => {
-    if (!index) return;
+    if (index === undefined || index === null) return;
     const roadmap = roadmaps[index];
     if (roadmap) {
       router.push(`/roadmaps/${roadmap.id}`);
@@ -32,7 +32,7 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md border border-border p-6 ">
+    <div className="card ">
       <h3>Active Roadmaps</h3>
       <p>Goals by roadmap</p>
       <BarChart
@@ -62,8 +62,8 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
         <YAxis width="auto" />
         <Tooltip />
         <Legend />
-        <Bar dataKey="completed" stackId="a" fill="#008994" background />
-        <Bar dataKey="total" stackId="b" fill="#9bcbcf" background />
+        <Bar dataKey="completed" stackId="a" fill="#5554b6" background />
+        <Bar dataKey="total" stackId="b" fill="#a6a6d4" background />
       </BarChart>
     </div>
   );

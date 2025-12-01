@@ -130,4 +130,5 @@ export const fetchRoadmap = async (roadmapId: string) => {
   }
 };
 
+// cache the roadmap fetch because it is used in a server component
 export const fetchRoadmapCache = cache(fetchRoadmap);

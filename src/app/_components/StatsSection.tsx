@@ -55,7 +55,7 @@ export default function StatsSection({
         {cardsData.map((card, index) => (
           <li
             key={index}
-            className="relative min-h-40 bg-secondary py-4 px-[8%] rounded-xl shadow-lg hover:-translate-y-1 transition flex-between text-white hover:bg-radial-[at_50%_75%] from-white/10 via-white/5 to-secondary to-90%"
+            className="relative min-h-40 bg-primary py-4 px-[8%] rounded-xl shadow-lg hover:-translate-y-1 transition flex-between text-white hover:bg-radial-[at_50%_75%] from-white/10 via-white/5 to-primary to-90%"
           >
             <div className="flex flex-col">
               <span className="title font-semibold text-sm opacity-90">
@@ -66,7 +66,7 @@ export default function StatsSection({
                 {card.isPercentage ? "%" : ""}
               </span>
             </div>
-            <div className="flex-center rounded text-[#80c4ca]">
+            <div className="flex-center rounded text-[#d4d4ed]">
               {card.icon}
             </div>
           </li>

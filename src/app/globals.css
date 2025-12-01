@@ -131,7 +131,11 @@ body {
   }
 
   .card {
-    @apply p-4  rounded-lg shadow-[0px_1px_6px_rgba(0,0,0,0.12)];
+    @apply bg-white rounded-xl shadow-md border border-border p-6;
+  }
+
+  .ai-loading {
+    @apply block ms-4 mb-6 mt-4 h-4 w-4 border-2 border-dashed border-primary rounded-full animate-spin;
   }
 }
 

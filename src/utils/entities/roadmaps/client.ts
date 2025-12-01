@@ -16,10 +16,10 @@ export const fetchRoadmapsClient = async (): Promise<Roadmap[]> => {
     goalsQuery,
   ]);
 
-  if (roadmapsRes.error) {
+  if (roadmapsRes?.error) {
     throw new Error(roadmapsRes.error.message);
   }
-  if (goalsRes.error) {
+  if (goalsRes?.error) {
     throw new Error(goalsRes.error.message);
   }
 

@@ -12,7 +12,7 @@ interface ButtonProps {
   className?: string;
   type?: "button" | "submit";
   disabled?: boolean;
-  loading?: boolean;
+  // loading?: boolean;
   onClick?: () => void;
   href?: string | undefined;
   children?: React.ReactNode;
@@ -34,7 +34,9 @@ export default function Button({
   const isDisabled = disabled || pending;
 
   const buttonClassname = () => {
-    let joinClasses = `flex-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all font-semibold shadow ${className} `;
+    let joinClasses = `flex-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all font-semibold shadow ${className} ${
+      isDisabled ? "opacity-50 cursor-auto! " : ""
+    }`;
 
     switch (varient) {
       case "skeleton":
