@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import { chatTypes } from "@/lib/types";
+import ResponseMarkdown from "@/components/global/ai/ResponseMarkdown";
 
 export default function Conversation({
   chatData,
@@ -28,7 +29,7 @@ export default function Conversation({
           return (
             <div key={index} className="user-message">
               {isUserMessage && getTextFromParts(chat.parts) && (
-                <div className="mt-6 px-6 py-2 w-fit max-w-[90%] whitespace-break-spaces rounded-lg border-border border bg-muted shadow-sm">
+                <div className="mt-6 px-6 py-2 w-fit max-w-[90%] whitespace-pre-wrap rounded-lg border-border border bg-muted shadow-sm">
                   {getTextFromParts(chat.parts)}
                 </div>
               )}
@@ -38,17 +39,9 @@ export default function Conversation({
         if (isAiMessage)
           return (
             <div key={index}>
-              <div
-                className={` p-4 rounded-lg lg:max-w-[90%]  mt-2 whitespace-break-spaces`}
-              >
-                <ReactMarkdown
-                  components={{
-                    p: "span",
-                  }}
-                >
-                  {getTextFromParts(chat.parts)}
-                </ReactMarkdown>
-              </div>
+              <ResponseMarkdown className="mt-2 p-4 lg:max-w-[90%]  ">
+                {getTextFromParts(chat.parts)}
+              </ResponseMarkdown>
             </div>
           );
       })}

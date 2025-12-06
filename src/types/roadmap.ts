@@ -11,9 +11,11 @@ export interface Goal {
   roadmap_id: number;
   name: string;
   description?: string | null;
-  priority: string;
+  priority: GoalPriority;
   created_at: string;
   status: GoalStatus;
 }
+
+export type GoalPriority = "high" | "medium" | "low";
 
 export type GoalStatus = "todo" | "inprogress" | "done";

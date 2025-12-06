@@ -50,7 +50,7 @@ export default async function CreateRoadmapPage() {
             href="/roadmaps"
             className="w-full p-3! flex-1"
             title={"Cancel"}
-            varient={"ghost"}
+            variant={"ghost"}
             type="button"
           />
 

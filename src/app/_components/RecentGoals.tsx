@@ -1,21 +1,9 @@
+import GoalPriority from "@/components/global/goal/GoalPriority";
 import { Goal, GoalStatus } from "@/types/roadmap";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 export default function RecentGoals({ goals }: { goals: Goal[] }) {
-  const getPriorityStyles = (priority: string) => {
-    switch (priority) {
-      case "high":
-        return "bg-primary text-white";
-      case "medium":
-        return "bg-secondary/75 text-yellow-100";
-      case "low":
-        return "bg-gray text-white";
-      default:
-        return "text-text text-muted";
-    }
-  };
-
   const latestDoneOrInprogressGoals = goals.filter(
     (goal) => goal.status != "todo"
   );
@@ -44,13 +32,7 @@ export default function RecentGoals({ goals }: { goals: Goal[] }) {
                   {goal.description || "-"}
                 </p>
               </div>
-              <span
-                className={`${getPriorityStyles(
-                  goal.priority
-                )} text-xs py-1 px-2 rounded capitalize mt-4 inline-block`}
-              >
-                {goal.priority}
-              </span>
+              <GoalPriority priority={goal.priority} />
             </Link>
             <ExternalLink
               className="absolute top-2 right-2 text-secondary   group-hover:opacity-100 opacity-0 transition-opacity"

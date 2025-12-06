@@ -11,15 +11,19 @@ export default function ConfirmButton({
   confirmTitle,
   values,
   onSuccess,
+  className,
+  message,
 }: {
   children: React.ReactNode;
   onConfirm: (
     previousState: any,
     formData: FormData
-  ) => Promise<{ status: "success" | "error"; message: string }>;
+  ) => Promise<{ status: "success" | "error"; message: string }> | any;
   confirmTitle?: string;
   values?: Record<string, string | number | boolean>;
   onSuccess?: () => void;
+  className?: string;
+  message?: string;
 }) {
   const [showConfirm, setShowConfirm] = useState(false);
   const showConfirmation = () => setShowConfirm(true);
@@ -64,7 +68,7 @@ export default function ConfirmButton({
                 size={20}
                 className="absolute right-4 top-4 text-text/80 hover:text-text/60 cursor-pointer"
               />
-              <p className="text-xl">Are you sure?</p>
+              <p className="text-xl">{message || "Are you sure?"}</p>
               <SubmitButton
                 title={confirmTitle || "Confirm"}
                 className="mt-6 min-w-[200px] text-sm"
@@ -75,7 +79,7 @@ export default function ConfirmButton({
         )
       ) : (
         <button
-          className="active:outline-0"
+          className={`active:outline-0 focus:outline-0 " + ${className || ""}`}
           onPointerDown={(e) => {
             e.stopPropagation();
           }}

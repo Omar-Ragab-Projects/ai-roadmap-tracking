@@ -43,6 +43,7 @@
   --font-mono: var(--font-geist-mono);
   --animate-move-left: move-left 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
   --animate-move-down: move-down 0.2s ease-out both;
+  --animate-move-up: move-up 0.2s ease-out both;
   --animate-fadein: fadein 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
@@ -115,6 +116,9 @@ body {
 }
 
 @layer components {
+  /* To use tooltip */
+  /* Add class: group => parent element */
+  /* Add class: hidden group-hover:block => tooltip element */
   .tooltip {
     @apply absolute top-center left-[calc(100%+0.8rem)] bg-primary text-white rounded-lg px-3 py-2 text-sm w-max;
   }
@@ -173,6 +177,17 @@ body {
 
 /* End Scrollbar */
 
+.mark-down-parent a {
+  @apply text-primary underline;
+}
+
+.generated-goals-wrapper > li[data-delay] {
+  opacity: 0;
+  animation: var(--animate-move-up);
+  animation-delay: attr(data-delay ms);
+  animation-fill-mode: forwards;
+}
+
 @keyframes fadein {
   0% {
     opacity: 0.6;
@@ -196,6 +211,17 @@ body {
 @keyframes move-down {
   0% {
     transform: translateY(-5%);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes move-up {
+  0% {
+    transform: translateY(5%);
     opacity: 0.6;
   }
   100% {

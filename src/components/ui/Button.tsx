@@ -8,7 +8,7 @@ interface ButtonProps {
   Icon?: React.ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
   >;
-  varient?: "default" | "skeleton" | "ghost";
+  variant?: "default" | "skeleton" | "ghost";
   className?: string;
   type?: "button" | "submit";
   disabled?: boolean;
@@ -22,7 +22,7 @@ export default function Button({
   children,
   title,
   Icon,
-  varient = "default",
+  variant = "default",
   className = "",
   type = "submit",
   disabled = false,
@@ -38,7 +38,7 @@ export default function Button({
       isDisabled ? "opacity-50 cursor-auto! " : ""
     }`;
 
-    switch (varient) {
+    switch (variant) {
       case "skeleton":
         joinClasses +=
           "text-black/70 hover:text-primary border-b border-transparent hover:border-primary/10 p-0! ";

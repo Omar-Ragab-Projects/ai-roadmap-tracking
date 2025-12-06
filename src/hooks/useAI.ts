@@ -62,25 +62,30 @@ export default function useAI(sessionId: string) {
       },
     ]);
 
-    // Get AI response as stream
-    const response = await chatSessionRef.current.sendMessageStream({
-      message: contentToSend,
-    });
+    try {
+      // Get AI response as stream
+      const response = await chatSessionRef.current.sendMessageStream({
+        message: contentToSend,
+      });
 
-    for await (const chunk of response) {
-      text += chunk.text;
+      for await (const chunk of response) {
+        text += chunk.text;
 
-      if (scrollTimes <= maxScrollTimes) {
-        lastAiContentElement?.scrollIntoView({
-          behavior: "smooth",
-        });
+        if (scrollTimes <= maxScrollTimes) {
+          lastAiContentElement?.scrollIntoView({
+            behavior: "smooth",
+          });
+        }
+
+        scrollTimes++;
+
+        if (lastAiContentElement) {
+          setLastAiMessageStream((pre) => pre + (chunk.text || ""));
+        }
       }
-
-      scrollTimes++;
-
-      if (lastAiContentElement) {
-        setLastAiMessageStream((pre) => pre + (chunk.text || ""));
-      }
+    } catch (error) {
+      console.log("Error in AI response:", error);
+      setIsLoading(false);
     }
 
     if (lastAiContentElement) {
@@ -102,6 +107,13 @@ export default function useAI(sessionId: string) {
     setIsLoading(false);
   }
 
+  const clearChatHistory = () => {
+    localStorage.removeItem(`chatHistory-${sessionId}`);
+    setHistory([]);
+    chatSessionRef.current = null;
+    initializeChatSession();
+  };
+
   return {
     history,
     setHistory,
@@ -110,5 +122,6 @@ export default function useAI(sessionId: string) {
     initializeChatSession,
     getAiResponse,
     chatSessionRef,
+    clearChatHistory,
   };
 }

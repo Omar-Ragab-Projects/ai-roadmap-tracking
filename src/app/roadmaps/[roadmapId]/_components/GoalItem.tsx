@@ -7,6 +7,7 @@ import { deleteGoalAction } from "@/utils/entities/goals/server";
 import { Goal, GoalStatus } from "@/types/roadmap";
 import { createPortal } from "react-dom";
 import EditGoalForm from "./edit-goal/EditGoalForm";
+import GoalPriority from "@/components/global/goal/GoalPriority";
 
 export default function GoalItem({ goal }: { goal?: Goal }) {
   if (!goal) return null;
@@ -21,19 +22,6 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-  };
-
-  const getPriorityStyles = (priority: string) => {
-    switch (priority) {
-      case "high":
-        return "bg-primary text-white";
-      case "medium":
-        return "bg-secondary/75 text-yellow-100";
-      case "low":
-        return "bg-gray text-white";
-      default:
-        return "text-text text-muted";
-    }
   };
 
   const getStatusStyles = (status: GoalStatus) => {
@@ -85,13 +73,7 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
               </p>
             </>
           )}
-          <span
-            className={`${getPriorityStyles(
-              goal.priority
-            )} text-xs py-1 px-2 rounded capitalize mt-4 inline-block`}
-          >
-            {goal.priority}
-          </span>
+          <GoalPriority priority={goal.priority} />
         </div>
 
         {/* Controllers */}

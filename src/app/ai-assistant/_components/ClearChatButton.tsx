@@ -7,7 +7,7 @@ export default function ClearChatButton({ onClear }: { onClear: () => void }) {
   return (
     <>
       <Button
-        varient="ghost"
+        variant="ghost"
         title={"Clear"}
         Icon={RotateCcw}
         onClick={onClear}
