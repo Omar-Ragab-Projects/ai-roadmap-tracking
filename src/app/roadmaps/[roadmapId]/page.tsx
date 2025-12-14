@@ -21,10 +21,10 @@ export default async function RoadmapPage({
     <div>
       <GoalsContextProvider>
         {/* Header */}
-        <div className="flex-between">
+        <div className="flex-between gap-12">
           <div className="flex-center gap-6">
             <BackTo href="/roadmaps" />
-            <div>
+            <div className="max-w-[600px]">
               <h1 className="text-3xl text-foreground font-bold">
                 {roadmap.title}
               </h1>

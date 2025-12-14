@@ -11,6 +11,7 @@ export default function useAI(sessionId: string) {
   const [lastAiMessageStream, setLastAiMessageStream] = useState<string>("");
   const [history, setHistory] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const initializeChatSession = () => {
     setLastAiMessageStream("");
@@ -38,6 +39,7 @@ export default function useAI(sessionId: string) {
     selectedRoadmap?: Roadmap | null
   ) {
     setIsLoading(true);
+    setError(null);
     let contentToSend = content;
     let text = "";
     let scrollTimes = 0;
@@ -85,6 +87,7 @@ export default function useAI(sessionId: string) {
       }
     } catch (error) {
       console.log("Error in AI response:", error);
+      setError(error instanceof Error ? error.message : "Unknown error");
       setIsLoading(false);
     }
 
@@ -123,5 +126,6 @@ export default function useAI(sessionId: string) {
     getAiResponse,
     chatSessionRef,
     clearChatHistory,
+    error,
   };
 }

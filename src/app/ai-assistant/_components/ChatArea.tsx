@@ -6,6 +6,7 @@ import useAI from "@/hooks/useAI";
 import { fetchRoadmapsClient } from "@/utils/entities/roadmaps/client";
 import { useQuery } from "@tanstack/react-query";
 import { Roadmap } from "@/types/roadmap";
+import { actionPromiseResponse } from "@/types/globalTypes";
 // const suggestions = [
 //   "Explain React hooks in simple terms",
 //   "How do I optimize performance?",
@@ -72,7 +73,7 @@ export default function ChatArea({
   const sendAction = async (
     previousState: any,
     formData: FormData
-  ): Promise<{ status: "success" | "error"; message: string }> => {
+  ): Promise<actionPromiseResponse> => {
     if (isLoading)
       throw new Error("Please wait for the current response to finish.");
 

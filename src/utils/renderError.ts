@@ -1,6 +1,6 @@
-const renderError = (
-  error: any
-): { status: "success" | "error"; message: string } => {
+import { actionPromiseResponse } from "@/types/globalTypes";
+
+const renderError = (error: any): actionPromiseResponse => {
   if (error instanceof Error) {
     return { status: "error", message: error.message };
   } else {

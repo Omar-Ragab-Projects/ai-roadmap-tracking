@@ -1,5 +1,5 @@
 interface FormGroupProps {
-  label: string;
+  label?: string;
   name: string;
   textarea?: boolean;
   required?: boolean;
@@ -25,11 +25,17 @@ export default function FormGroup({
   return (
     <div className="not-first:mt-6">
       <label htmlFor={name}>
-        <span>
-          {label} {required && <span className="text-red-300">*</span>}
-        </span>
+        {label && (
+          <span>
+            {label} {required && <span className="text-red-300">*</span>}
+          </span>
+        )}
 
-        {textarea ? <textarea {...props} /> : <input {...props} />}
+        {textarea ? (
+          <textarea onKeyDown={(e) => e.stopPropagation()} {...props} />
+        ) : (
+          <input {...props} />
+        )}
       </label>
     </div>
   );

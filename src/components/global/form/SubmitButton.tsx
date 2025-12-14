@@ -9,12 +9,14 @@ interface SubmitButtonProps {
     Omit<React.SVGProps<SVGSVGElement>, "ref"> &
       React.RefAttributes<SVGSVGElement>
   >;
+  children?: React.ReactNode;
 }
 
 export default function SubmitButton({
   title = "",
   className = "",
   Icon,
+  children,
 }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
@@ -25,6 +27,8 @@ export default function SubmitButton({
       type="submit"
       title={title}
       Icon={Icon}
-    />
+    >
+      {children}
+    </Button>
   );
 }

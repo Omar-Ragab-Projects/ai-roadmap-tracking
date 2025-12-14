@@ -3,11 +3,12 @@
 import { createClient } from "@/utils/supabase/server";
 import renderError from "@/utils/renderError";
 import { cache } from "react";
+import { actionPromiseResponse } from "@/types/globalTypes";
 
 export const addRoadmapAction = async (
   prev: any,
   formData: FormData
-): Promise<{ status: "success" | "error"; message: string }> => {
+): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
   const title = formData.get("title");
   const description = formData.get("description");
@@ -20,7 +21,7 @@ export const addRoadmapAction = async (
   };
 
   try {
-    const res = await supabase.from("roadmaps").insert(data);
+    await supabase.from("roadmaps").insert(data);
     return { status: "success", message: "Roadmap created successfully!" };
   } catch (error) {
     return renderError(error);
@@ -30,7 +31,7 @@ export const addRoadmapAction = async (
 export const updateRoadmapAction = async (
   prev: any,
   formData: FormData
-): Promise<{ status: "success" | "error"; message: string }> => {
+): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
   const roadmapId = formData.get("roadmapId");
   const title = formData.get("title");
@@ -44,10 +45,7 @@ export const updateRoadmapAction = async (
   };
 
   try {
-    const res = await supabase
-      .from("roadmaps")
-      .update(data)
-      .eq("id", roadmapId);
+    await supabase.from("roadmaps").update(data).eq("id", roadmapId);
     return { status: "success", message: "Roadmap updated successfully!" };
   } catch (error) {
     return renderError(error);
@@ -57,7 +55,7 @@ export const updateRoadmapAction = async (
 export const deleteRoadmapAction = async (
   prev: any,
   formData: FormData
-): Promise<{ status: "success" | "error"; message: string }> => {
+): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
   const roadmapId = formData.get("roadmapId");
 
@@ -132,3 +130,44 @@ export const fetchRoadmap = async (roadmapId: string) => {
 
 // cache the roadmap fetch because it is used in a server component
 export const fetchRoadmapCache = cache(fetchRoadmap);
+
+export const saveRoadmapAction = async (
+  previousState: any,
+  formData: FormData
+): Promise<actionPromiseResponse> => {
+  const supabase = await createClient();
+  const roadmapData = formData.get("roadmapData") as string;
+  if (!roadmapData)
+    return { status: "error", message: "No roadmap data to save." };
+  const parsedData = JSON.parse(roadmapData);
+
+  try {
+    const roadmapRes = await supabase
+      .from("roadmaps")
+      .insert({
+        title: parsedData.title,
+        description: parsedData.description,
+      })
+      .select()
+      .single();
+    const roadmapId = roadmapRes.data.id;
+
+    const goalsData = parsedData.goals.map((goal: any) => ({
+      roadmap_id: roadmapId,
+      name: goal.name,
+      description: goal.description,
+      priority: goal.priority,
+      status: goal.status,
+    }));
+
+    await supabase.from("goals").insert(goalsData);
+
+    return {
+      status: "success",
+      message: "Roadmap saved successfully!",
+      payload: { id: roadmapId },
+    };
+  } catch (error) {
+    return renderError(error);
+  }
+};

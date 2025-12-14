@@ -12,7 +12,7 @@ const priorityOptions = [
   { color: "#5554b6", value: "high", label: "High" },
 ];
 
-export default function AddGoalForm({
+export default function EditGoalForm({
   hideEditRoadmap,
   goal,
 }: {
@@ -27,32 +27,13 @@ export default function AddGoalForm({
     }
   }, [goal.priority]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!(event.target as HTMLElement).closest(".edit-goal-form")) {
-        hideEditRoadmap();
-      }
-    };
-
-    document.body.addEventListener("click", handleClickOutside);
-    return () => document.body.removeEventListener("click", handleClickOutside);
-  }, []);
-
   return (
     <FormProvider
-      className="absolute edit-goal-form top-[10%] animate-move-down left-center w-[500px] max-w-[90%] flex flex-col bg-white p-6 rounded shadow-md"
+      className="flex flex-col edit-goal-form"
       action={updateGoalAction}
       onSuccess={hideEditRoadmap}
     >
-      <X
-        onClick={(e) => {
-          hideEditRoadmap();
-          e.stopPropagation();
-        }}
-        size={20}
-        className="absolute right-4 top-4 text-text/80 hover:text-text/60 cursor-pointer"
-      />
-      <p className="text-xl text-primary/80 text-center font-semibold mb-3 mt-6 text-shadow-md">
+      <p className="text-xl text-primary/80 text-center font-semibold mb-3 text-shadow-md">
         Edit goal in current roadmap
       </p>
       <input

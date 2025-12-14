@@ -1,21 +1,26 @@
 "use client";
-import ResponseMarkdown from "@/components/global/ai/ResponseMarkdown";
 import FormProvider from "@/components/global/form/FormProvider";
-import GoalPriority from "@/components/global/goal/GoalPriority";
+import XOGame from "@/components/global/XO/XOGame";
 import Button from "@/components/ui/Button";
-import ConfirmButton from "@/components/ui/ConfirmButton";
+import Dialog from "@/components/ui/Dialog";
 import useAI from "@/hooks/useAI";
 import useRender from "@/hooks/useRender";
+import { actionPromiseResponse } from "@/types/globalTypes";
 import { Roadmap } from "@/types/roadmap";
-import { RotateCcw, SaveAll, Sparkles, X } from "lucide-react";
-import React, {
-  startTransition,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Check, LoaderCircle, Sparkles, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import GeneratedRoadmap from "./GeneratedRoadmap";
+
+const SAMPLE_SUGGESTIONS = [
+  "React Development",
+  "Next.js Full Stack",
+  "TypeScript",
+  "Web Design",
+  "Node.js Backend",
+  "Database Design",
+];
 
 export default function RoadmapGenerator() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -23,6 +28,7 @@ export default function RoadmapGenerator() {
   const render = useRender();
   const [generatedRoadmapData, setGeneratedRoadmapData] =
     useState<Roadmap | null>(null);
+  const [startGeneration, setStartGeneration] = useState(false);
 
   const {
     history,
@@ -31,7 +37,12 @@ export default function RoadmapGenerator() {
     getAiResponse,
     chatSessionRef,
     clearChatHistory,
+    error,
   } = useAI("ai-roadmap-generator");
+
+  useEffect(() => {
+    if (isLoading) setStartGeneration(true);
+  }, [isLoading]);
 
   useEffect(() => {
     if (!chatSessionRef.current) initializeChatSession();
@@ -47,18 +58,17 @@ export default function RoadmapGenerator() {
   const generateAction = async (
     previousState: any,
     formData: FormData
-  ): Promise<{ status: "success" | "error"; message: string }> => {
+  ): Promise<actionPromiseResponse> => {
     if (isLoading)
       throw new Error("Please wait for the current response to finish.");
 
     try {
       clearChatHistory();
       let userContent = formData.get("userContent") as string;
-      if (!userContent) throw new Error("Please enter your message.");
 
       userContent += `\n\n
       You are an AI who will generate a structured learning roadmap based on the user's input
-      and into each goal description if you could send references like courses URLs.
+      and into each goal description if you could send references like courses URLs and make it accessable in markdown.
       If the user content is vague, send response asking for clarification in normal string type. else,
       I want you to give me the data in JSON format only, with the following structure:
       {
@@ -74,6 +84,7 @@ export default function RoadmapGenerator() {
       `;
 
       (async () => getAiResponse(userContent))();
+      // if (!userContent) throw new Error("Please enter your message.");
 
       return { status: "success", message: "" };
     } catch (error) {
@@ -127,6 +138,11 @@ export default function RoadmapGenerator() {
     return { status: "success", message: "Goal deleted successfully." };
   };
 
+  const resetRoadmapData = () => {
+    setGeneratedRoadmapData(null);
+    clearChatHistory();
+  };
+
   return (
     <section>
       <div className="card mt-10">
@@ -144,6 +160,7 @@ export default function RoadmapGenerator() {
             placeholder="e.g., React for building interactive web apps, or Full-stack development with Next.js..."
             onKeyDown={hitEnterHandler}
             name="userContent"
+            required
           />
           <Button
             type="submit"
@@ -154,6 +171,52 @@ export default function RoadmapGenerator() {
             {isLoading ? "Generating Roadmap..." : "Generate Roadmap"}
           </Button>
         </FormProvider>
+
+        <Dialog
+          open={startGeneration && !generatedRoadmap?.tryAgain}
+          onClose={() => setStartGeneration(false)}
+        >
+          <div
+            className={`flex items-center gap-2  p-4 rounded-md ${
+              isLoading ? "bg-primary/10" : "bg-secondary/25"
+            }`}
+          >
+            <div>
+              {isLoading ? (
+                <LoaderCircle className="animate-spin" size={14} />
+              ) : (
+                <Check className="mr-2 text-secondary/75" />
+              )}
+            </div>
+            <span className="text-sm text-black/70">
+              {isLoading ? "Generating Roadmap..." : "Roadmap is ready."}
+            </span>
+          </div>
+
+          <h3 className="mt-12 text-center">Have a break and play X|O</h3>
+          <XOGame />
+        </Dialog>
+
+        <div className="mt-4">
+          <span className="text-text text-sm">
+            Or try one of these suggestions:
+          </span>
+          <ul className="mt-1">
+            {SAMPLE_SUGGESTIONS.map((suggestion, index) => (
+              <li
+                key={index}
+                className="cursor-pointer text-black text-xs bg-primary/10 inline-block mr-2 mt-2 px-3 py-2 rounded-full hover:bg-primary/20 transition"
+                onClick={() => {
+                  if (formRef.current) {
+                    formRef.current.userContent.value = suggestion;
+                  }
+                }}
+              >
+                {suggestion}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="card mt-6 " ref={roadmapDataRef}>
@@ -162,7 +225,7 @@ export default function RoadmapGenerator() {
         )}
         {!render && <div className="ai-loading" />}
 
-        {!generatedRoadmap && render && !generatedRoadmapData && (
+        {!generatedRoadmap?.message && render && !generatedRoadmapData && (
           <p className="text-text">Your generated roadmap will appear here.</p>
         )}
 
@@ -178,58 +241,14 @@ export default function RoadmapGenerator() {
           </div>
         ) : (
           generatedRoadmapData && (
-            <div>
-              <div className="flex-between">
-                {/* Title & Description */}
-                <div className="max-w-[80%]">
-                  <h4 className="font-semibold text-lg">
-                    {generatedRoadmapData.title}
-                  </h4>
-                  <p>{generatedRoadmapData.description}</p>
-                </div>
-                {/* Save & Reset */}
-                <div className="flex gap-2">
-                  <Button
-                    onClick={() => {
-                      clearChatHistory();
-                      setGeneratedRoadmapData(null);
-                    }}
-                    Icon={RotateCcw}
-                    variant="ghost"
-                  >
-                    Reset
-                  </Button>
-                  <Button Icon={SaveAll}>Save</Button>
-                </div>
-              </div>
-              {/* Goals */}
-              <ul className="generated-goals-wrapper mt-6 flex flex-col gap-1">
-                {generatedRoadmapData.goals?.map((goal, index) => (
-                  <li
-                    data-delay={index * 200}
-                    key={index}
-                    className="mb-2 relative whitespace-pre-line text-wrap flex-between bg-primary/6 border border-border p-3 rounded-lg shadow-sm "
-                  >
-                    <ConfirmButton
-                      className="absolute top-2 right-2 hover:text-red-500 transition-all cursor-pointer"
-                      message="Remove this goal?"
-                      onConfirm={() => deleteGoal(index)}
-                    >
-                      <X className="" />
-                    </ConfirmButton>
-                    <div className="max-w-[70%]">
-                      <h5 className="font-semibold">{goal.name}</h5>
-                      <ResponseMarkdown className="mt-2 text-text text-sm">
-                        {goal.description || ""}
-                      </ResponseMarkdown>
-                    </div>
-                    <GoalPriority priority={goal.priority} className="" />
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <GeneratedRoadmap
+              generatedRoadmapData={generatedRoadmapData}
+              resetRoadmapData={resetRoadmapData}
+              deleteGoal={deleteGoal}
+            />
           )
         )}
+        {error && <div className="text-text text-sm mt-4">Error: {error}</div>}
       </div>
     </section>
   );

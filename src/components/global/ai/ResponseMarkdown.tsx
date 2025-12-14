@@ -9,7 +9,8 @@ export default function ResponseMarkdown({
 }) {
   return (
     <div
-      className={`${className} mark-down-parent wrap-break-word whitespace-pre-wrap `}
+      className={`${className} mark-down-parent wrap-break-word whitespace-pre-wrap  `}
+      style={{ wordBreak: "break-word" }}
     >
       <ReactMarkdown
         components={{

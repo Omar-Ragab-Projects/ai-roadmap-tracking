@@ -7,13 +7,18 @@ interface FormProviderProps {
   action: (
     previousState: any,
     formData: FormData
-  ) => Promise<{ status: "success" | "error"; message: string }>;
+  ) => Promise<{ status: "success" | "error"; message: string; payload?: any }>;
   className?: string;
-  onSuccess?: () => void;
+  onSuccess?: (payload?: any) => void;
   ref?: React.Ref<HTMLFormElement> | undefined;
+  hiddenFields?: { name: string; value: string }[];
 }
 
-const initState = { message: "", status: "" as "success" | "error" };
+const initState = {
+  message: "",
+  status: "" as "success" | "error",
+  payload: null,
+};
 
 export default function FormProvider({
   children,
@@ -21,6 +26,7 @@ export default function FormProvider({
   className = "",
   onSuccess,
   ref = undefined,
+  hiddenFields = [],
 }: FormProviderProps) {
   const [state, formAction, isPending] = useActionState(action, initState);
   const { setMessage } = useContext(ToastContext);
@@ -31,11 +37,19 @@ export default function FormProvider({
     setMessage(state.message);
 
     if (state.status == "success" && onSuccess) {
-      onSuccess();
+      onSuccess(state.payload);
     }
   }, [state]);
   return (
     <form ref={ref} action={formAction} className={className}>
+      {hiddenFields.map((field) => (
+        <input
+          key={field.name}
+          type="hidden"
+          name={field.name}
+          defaultValue={field.value}
+        />
+      ))}
       {children}
     </form>
   );

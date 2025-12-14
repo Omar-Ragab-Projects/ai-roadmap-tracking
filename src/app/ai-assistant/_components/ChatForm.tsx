@@ -1,5 +1,6 @@
 import FormProvider from "@/components/global/form/FormProvider";
 import Button from "@/components/ui/Button";
+import { actionPromiseResponse } from "@/types/globalTypes";
 import { Roadmap } from "@/types/roadmap";
 import { Send } from "lucide-react";
 import { Ref } from "react";
@@ -17,7 +18,7 @@ export default function ChatForm({
   sendAction: (
     previousState: any,
     formData: FormData
-  ) => Promise<{ status: "success" | "error"; message: string }>;
+  ) => Promise<actionPromiseResponse>;
   isLoading: boolean;
   roadmaps: Roadmap[] | undefined;
   selectRoadmap: (e: React.ChangeEvent<HTMLSelectElement>) => void;

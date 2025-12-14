@@ -1,13 +1,19 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Pencil, Trash2 } from "lucide-react";
+import { Eye, Pen, Pencil, PenLine, Trash2 } from "lucide-react";
 import ConfirmButton from "@/components/ui/ConfirmButton";
 import { deleteGoalAction } from "@/utils/entities/goals/server";
 import { Goal, GoalStatus } from "@/types/roadmap";
-import { createPortal } from "react-dom";
 import EditGoalForm from "./edit-goal/EditGoalForm";
 import GoalPriority from "@/components/global/goal/GoalPriority";
+import ResponseMarkdown from "@/components/global/ai/ResponseMarkdown";
+import Button from "@/components/ui/Button";
+import Dialog from "@/components/ui/Dialog";
+import FormProvider from "@/components/global/form/FormProvider";
+import FormGroup from "@/components/global/form/FormGroup";
+import SubmitButton from "@/components/global/form/SubmitButton";
+import { addNoteAction } from "@/utils/entities/notes/server";
 
 export default function GoalItem({ goal }: { goal?: Goal }) {
   if (!goal) return null;
@@ -15,6 +21,12 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
   const [editRoadmap, setEditRoadmap] = useState<number | null>(null);
   const showEditRoadmap = (roadmapId: number) => setEditRoadmap(roadmapId);
   const hideEditRoadmap = () => setEditRoadmap(null);
+
+  const [showReferences, setShowReferences] = useState(false);
+  const toggleShowReferences = () => setShowReferences(!showReferences);
+
+  const [addNote, setAddNote] = useState(false);
+  const toggleAddNote = () => setAddNote(!addNote);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: goal.id });
@@ -39,7 +51,7 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
 
   return (
     <li
-      className={`group cursor-grab list-none bg-[#dedee8] hover:bg-[#e2e2e2] active:bg-[#d4d4dd] active:opacity-40 rounded-lg p-6 mb-3 ${getStatusStyles(
+      className={`group cursor-grab list-none bg-[#dedee8] hover:bg-[#e2e2e2] active:bg-[#d4d4dd] active:opacity-95 rounded-lg p-6 mb-3 ${getStatusStyles(
         goal.status
       )}`}
       ref={setNodeRef}
@@ -50,30 +62,55 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
       {/* ... */}
       <div className="flex justify-between items-start">
         <div>
-          {/* Title & Description */}
-          {editRoadmap == goal.id ? (
-            <>
-              {createPortal(
-                <div
-                  onPointerDown={(e) => {
-                    e.stopPropagation();
-                  }}
-                  className="fixed inset-0 bg-black/40 bg-opacity-50 z-1000"
-                >
-                  <EditGoalForm hideEditRoadmap={hideEditRoadmap} goal={goal} />
-                </div>,
-                document.body
-              )}
-            </>
-          ) : (
-            <>
-              <h4 className="font-medium">{goal.name}</h4>
-              <p className="text-text whitespace-break-spaces">
-                {goal.description || "-"}
-              </p>
-            </>
+          {/* Edit Goal */}
+          <Dialog open={editRoadmap == goal.id} onClose={hideEditRoadmap}>
+            <EditGoalForm hideEditRoadmap={hideEditRoadmap} goal={goal} />
+          </Dialog>
+
+          <h4 className="font-medium">{goal.name}</h4>
+          <p className="text-text whitespace-break-spaces">
+            {/* {goa  l.description || "-"} */}
+          </p>
+          <ResponseMarkdown className="text-text">
+            {goal.description?.split("References:")[0] || "-"}
+          </ResponseMarkdown>
+
+          {goal.description?.split("References:")[1] && (
+            <Button className="mt-4" Icon={Eye} onClick={toggleShowReferences}>
+              References
+            </Button>
           )}
-          <GoalPriority priority={goal.priority} />
+
+          <Dialog open={showReferences} onClose={toggleShowReferences}>
+            <ResponseMarkdown className="text-text ">
+              {goal.description?.split("References:")[1] || "No references."}
+            </ResponseMarkdown>
+          </Dialog>
+
+          <div className="flex items-center gap-4 mt-8">
+            <GoalPriority priority={goal.priority} className="mt-0!" />
+            <Button
+              className="shadow-none text-xs opacity-50 hover:opacity-100 transition focus:outline-0 p-4"
+              Icon={PenLine}
+              variant="skeleton"
+              onClick={toggleAddNote}
+            >
+              Add note
+            </Button>
+
+            <Dialog open={addNote} onClose={toggleAddNote}>
+              <FormProvider action={addNoteAction} onSuccess={toggleAddNote}>
+                <h3 className="mb-4">Add note to {goal.name}</h3>
+                <FormGroup
+                  textarea
+                  name="goalNote"
+                  placeholder="When I searched for ...."
+                  required
+                />
+                <SubmitButton className="mt-4">Add Note</SubmitButton>
+              </FormProvider>
+            </Dialog>
+          </div>
         </div>
 
         {/* Controllers */}

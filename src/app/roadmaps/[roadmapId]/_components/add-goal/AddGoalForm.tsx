@@ -23,19 +23,11 @@ export default function AddGoalForm({
 
   return (
     <FormProvider
-      className="absolute add-goal-form top-[10%] animate-move-down left-center w-[500px] max-w-[90%] flex flex-col bg-white p-6 rounded shadow-md"
+      className="flex flex-col"
       action={addGoalAction}
       onSuccess={hideAddGoalForm}
     >
-      <X
-        onClick={(e) => {
-          hideAddGoalForm();
-          e.stopPropagation();
-        }}
-        size={20}
-        className="absolute right-4 top-4 text-text/80 hover:text-text/60 cursor-pointer"
-      />
-      <p className="text-xl text-primary/80 text-center font-semibold mb-3 mt-6 text-shadow-md">
+      <p className="text-xl text-primary/80 text-center font-semibold mb-3 text-shadow-md">
         Add new goal to current roadmap
       </p>
       <input type="text" name="roadmapId" defaultValue={roadmapId} hidden />

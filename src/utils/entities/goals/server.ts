@@ -1,5 +1,6 @@
 "use server";
 
+import { actionPromiseResponse } from "@/types/globalTypes";
 import renderError from "@/utils/renderError";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
@@ -7,7 +8,7 @@ import { revalidatePath } from "next/cache";
 export const addGoalAction = async (
   prev: any,
   formData: FormData
-): Promise<{ status: "success" | "error"; message: string }> => {
+): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
   const roadmapId = formData.get("roadmapId");
   const name = formData.get("name");
@@ -39,7 +40,7 @@ export const addGoalAction = async (
 export const updateGoalAction = async (
   prev: any,
   formData: FormData
-): Promise<{ status: "success" | "error"; message: string }> => {
+): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
   const goalId = formData.get("goalId");
   const roadmapId = formData.get("roadmapId");
@@ -68,7 +69,7 @@ export const updateGoalAction = async (
 export const deleteGoalAction = async (
   prev: any,
   formData: FormData
-): Promise<{ status: "success" | "error"; message: string }> => {
+): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
   const goalId = formData.get("goalId");
   const roadmapId = formData.get("roadmapId");
@@ -86,7 +87,7 @@ export const deleteGoalAction = async (
 export const updateGoalStatus = async (
   goalId: string,
   status: string
-): Promise<{ status: "success" | "error"; message: string }> => {
+): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
   try {
     const res = await supabase
