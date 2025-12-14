@@ -2,19 +2,21 @@
 import { routes } from "@/lib/routes";
 import { Plus, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import SmallView from "./components/SmallView";
 
 export default function ASide() {
-  const [activePath, setActivePath] = useState("");
+  const pathname = usePathname();
   const [smallView, setSmallView] = useState(false);
   const toggleView = () => setSmallView(!smallView);
 
-  const isActivePath = (path: string) => activePath == path;
+  const getActivePath = () => {
+    const firstSegment = "/" + pathname.split("/")[1];
+    return firstSegment || "/";
+  };
 
-  useEffect(() => {
-    setActivePath("/" + window.location.pathname.split("/")[1] || "/");
-  }, []);
+  const isActivePath = (path: string) => getActivePath() === path;
 
   return (
     <aside
@@ -43,7 +45,6 @@ export default function ASide() {
             <li key={index} className="not-last:mb-2 relative group">
               <Link
                 href={route.path}
-                onNavigate={() => setActivePath(route.path)}
                 className={`flex items-center gap-2 px-4 py-2 text-lg font-semibold rounded-lg hover:bg-sidebar-primary
                   ${smallView ? "justify-center" : ""} 
                   ${isActivePath(route.path) ? "bg-sidebar-primary" : ""}`}

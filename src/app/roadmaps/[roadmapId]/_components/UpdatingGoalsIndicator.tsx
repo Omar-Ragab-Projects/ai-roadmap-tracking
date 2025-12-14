@@ -25,7 +25,7 @@ export default function UpdatingGoalsIndicator({
           Saving changes...
         </span>
       ) : (
-        <span className="text-xs text-primary/30 italic flex flex-col items-center me-5">
+        <span className="text-xs text-primary/30 italic flex flex-col items-center me-5 text-center">
           <CloudCheck className="w-4 h-4" /> All changes saved
         </span>
       )}

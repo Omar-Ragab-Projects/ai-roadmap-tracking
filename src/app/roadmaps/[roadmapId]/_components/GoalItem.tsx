@@ -99,7 +99,11 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
             </Button>
 
             <Dialog open={addNote} onClose={toggleAddNote}>
-              <FormProvider action={addNoteAction} onSuccess={toggleAddNote}>
+              <FormProvider
+                action={addNoteAction}
+                onSuccess={toggleAddNote}
+                hiddenFields={[{ name: "goalId", value: goal.id.toString() }]}
+              >
                 <h3 className="mb-4">Add note to {goal.name}</h3>
                 <FormGroup
                   textarea

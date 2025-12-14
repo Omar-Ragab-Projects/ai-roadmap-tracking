@@ -46,20 +46,20 @@ export default function ConfirmButton({
 
   return (
     <>
-      {!showConfirm && (
-        <button
-          className={`active:outline-0 focus:outline-0 " + ${className || ""}`}
-          onPointerDown={(e) => {
-            e.stopPropagation();
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            showConfirmation();
-          }}
-        >
-          {children}
-        </button>
-      )}
+      {/* {!showConfirm && ( */}
+      <button
+        className={`active:outline-0 focus:outline-0 " + ${className || ""}`}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          showConfirmation();
+        }}
+      >
+        {children}
+      </button>
+      {/* // )} */}
 
       <Dialog open={showConfirm} onClose={hideConfirmation}>
         <FormProvider

@@ -188,6 +188,14 @@ body {
   animation-fill-mode: forwards;
 }
 
+.max-characters {
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 @keyframes fadein {
   0% {
     opacity: 0.6;

@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Conversation from "./Conversation";
 import ChatForm from "./ChatForm";
 import useAI from "@/hooks/useAI";
@@ -7,11 +7,6 @@ import { fetchRoadmapsClient } from "@/utils/entities/roadmaps/client";
 import { useQuery } from "@tanstack/react-query";
 import { Roadmap } from "@/types/roadmap";
 import { actionPromiseResponse } from "@/types/globalTypes";
-// const suggestions = [
-//   "Explain React hooks in simple terms",
-//   "How do I optimize performance?",
-//   "What's the best way to manage state?",
-// ];
 
 export default function ChatArea({
   onClearChat,

@@ -26,3 +26,45 @@ export const addNoteAction = async (
     return renderError(error);
   }
 };
+
+export const deleteNoteAction = async (
+  previousState: any,
+  formData: FormData
+) => {
+  try {
+    const supabase = await createClient();
+    const noteId = formData.get("noteId") as string;
+
+    if (!noteId) {
+      return { status: "error", message: "Note ID is required." };
+    }
+
+    await supabase.from("notes").delete().eq("id", noteId);
+
+    return { status: "success", message: "Note deleted successfully!" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+export const updateNoteAction = async (
+  previousState: any,
+  formData: FormData
+): Promise<actionPromiseResponse> => {
+  try {
+    const supabase = await createClient();
+    const noteId = formData.get("noteId") as string;
+    const updatedNote = formData.get("updatedNote") as string;
+    if (!noteId || !updatedNote) {
+      return {
+        status: "error",
+        message: "Note ID and updated note are required.",
+      };
+    }
+    await supabase.from("notes").update({ note: updatedNote }).eq("id", noteId);
+
+    return { status: "success", message: "Note updated successfully!" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
