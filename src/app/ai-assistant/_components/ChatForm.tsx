@@ -1,3 +1,4 @@
+"use client";
 import FormProvider from "@/components/global/form/FormProvider";
 import Button from "@/components/ui/Button";
 import { actionPromiseResponse } from "@/types/globalTypes";

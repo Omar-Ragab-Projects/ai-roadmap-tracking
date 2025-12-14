@@ -1,3 +1,4 @@
+"use client";
 interface FormGroupProps {
   label?: string;
   name: string;
