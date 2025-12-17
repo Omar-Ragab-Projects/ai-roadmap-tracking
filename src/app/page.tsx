@@ -6,8 +6,7 @@ import RecentGoals from "./_components/RecentGoals";
 
 export default async function HomePage() {
   const { roadmaps, totalGoals } = await fetchRoadmapsServer();
-
-  console.log("Roadmaps on home page:", totalGoals);
+  console.log("Roadmaps on home page:", roadmaps, totalGoals);
   return (
     <>
       <header>
@@ -19,10 +18,10 @@ export default async function HomePage() {
 
       <StatsSection roadmaps={roadmaps} totalGoals={totalGoals} />
 
-      <div className="grid md:grid-cols-2 gap-6 mt-10">
+      <section className="grid md:grid-cols-2 gap-6 mt-10">
         <ChartSection roadmaps={roadmaps} />
         <RecentGoals goals={totalGoals} />
-      </div>
+      </section>
     </>
   );
 }

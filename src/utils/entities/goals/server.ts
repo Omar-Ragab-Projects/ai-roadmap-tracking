@@ -1,6 +1,7 @@
 "use server";
 
 import { actionPromiseResponse } from "@/types/globalTypes";
+import getAnonymousUser from "@/utils/anonymous-users/getAnonymousUser";
 import renderError from "@/utils/renderError";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
@@ -10,6 +11,8 @@ export const addGoalAction = async (
   formData: FormData
 ): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
+  const user = await getAnonymousUser();
+
   const roadmapId = formData.get("roadmapId");
   const name = formData.get("name");
   const description = formData.get("description");
@@ -19,6 +22,7 @@ export const addGoalAction = async (
 
   const data = {
     roadmap_id: roadmapId,
+    user_id: user?.id,
     name,
     description,
     priority: priority || "medium",

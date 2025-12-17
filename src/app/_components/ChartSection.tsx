@@ -21,7 +21,7 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
       roadmap.goals?.filter((goal) => goal.status == "done").length || 0,
   }));
 
-  console.log("Chart data:", data);
+  // console.log("Chart data:", data);
 
   const redirectToRoadmapByIndex = (index: number) => {
     if (index === undefined || index === null) return;

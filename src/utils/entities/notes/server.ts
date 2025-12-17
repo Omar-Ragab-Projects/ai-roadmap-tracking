@@ -1,5 +1,6 @@
 "use server";
 import { actionPromiseResponse } from "@/types/globalTypes";
+import getAnonymousUser from "@/utils/anonymous-users/getAnonymousUser";
 import renderError from "@/utils/renderError";
 import { createClient } from "@/utils/supabase/server";
 
@@ -9,6 +10,7 @@ export const addNoteAction = async (
 ): Promise<actionPromiseResponse> => {
   try {
     const supabase = await createClient();
+    const user = await getAnonymousUser();
     const goalId = formData.get("goalId") as string;
     const goalNote = formData.get("goalNote") as string;
 
@@ -19,6 +21,7 @@ export const addNoteAction = async (
     await supabase.from("notes").insert({
       goal_id: goalId,
       note: goalNote,
+      user_id: user?.id,
     });
 
     return { status: "success", message: "Note added successfully!" };

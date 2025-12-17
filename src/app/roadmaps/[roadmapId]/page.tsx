@@ -15,7 +15,7 @@ export default async function RoadmapPage({
 }) {
   const roadmapId = (await params).roadmapId;
   const roadmap: Roadmap = await fetchRoadmapCache(roadmapId);
-  if (!roadmap) redirect("/roadmaps");
+  if (!roadmap?.id) redirect("/roadmaps");
 
   return (
     <div>

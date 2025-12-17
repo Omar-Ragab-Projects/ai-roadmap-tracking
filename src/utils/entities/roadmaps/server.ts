@@ -4,12 +4,15 @@ import { createClient } from "@/utils/supabase/server";
 import renderError from "@/utils/renderError";
 import { cache } from "react";
 import { actionPromiseResponse } from "@/types/globalTypes";
+import getAnonymousUser from "@/utils/anonymous-users/getAnonymousUser";
 
 export const addRoadmapAction = async (
   prev: any,
   formData: FormData
 ): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
+  const user = await getAnonymousUser();
+
   const title = formData.get("title");
   const description = formData.get("description");
 
@@ -18,6 +21,7 @@ export const addRoadmapAction = async (
   const data = {
     title,
     description,
+    user_id: user?.id,
   };
 
   try {
@@ -33,6 +37,8 @@ export const updateRoadmapAction = async (
   formData: FormData
 ): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
+  const user = await getAnonymousUser();
+
   const roadmapId = formData.get("roadmapId");
   const title = formData.get("title");
   const description = formData.get("description");
@@ -42,6 +48,7 @@ export const updateRoadmapAction = async (
   const data = {
     title,
     description,
+    user_id: user?.id,
   };
 
   try {
@@ -72,11 +79,18 @@ export const deleteRoadmapAction = async (
 
 export const fetchRoadmapsServer = async () => {
   const supabase = await createClient();
+  const user = await getAnonymousUser();
+
   const roadmapsQuery = supabase
     .from("roadmaps")
     .select("*")
+    .eq("user_id", user?.id)
     .order("created_at");
-  const goalsQuery = supabase.from("goals").select("*").order("updated_at");
+  const goalsQuery = supabase
+    .from("goals")
+    .select("*")
+    .eq("user_id", user?.id)
+    .order("updated_at");
 
   const [roadmapsRes, goalsRes] = await Promise.all([
     roadmapsQuery,
@@ -105,15 +119,19 @@ export const fetchRoadmapsServer = async () => {
 
 export const fetchRoadmap = async (roadmapId: string) => {
   const supabase = await createClient();
+  const user = await getAnonymousUser();
+
   const roadmapQuery = supabase
     .from("roadmaps")
     .select("*")
     .eq("id", roadmapId)
+    .eq("user_id", user?.id)
     .single();
   const goalQuery = supabase
     .from("goals")
     .select("*")
     .eq("roadmap_id", roadmapId)
+    .eq("user_id", user?.id)
     .order("created_at", { ascending: true });
 
   try {
@@ -136,6 +154,7 @@ export const saveRoadmapAction = async (
   formData: FormData
 ): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
+
   const roadmapData = formData.get("roadmapData") as string;
   if (!roadmapData)
     return { status: "error", message: "No roadmap data to save." };

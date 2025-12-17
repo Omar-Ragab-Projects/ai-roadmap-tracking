@@ -1,7 +1,6 @@
 import Button from "@/components/ui/Button";
 import PageTitle from "@/components/ui/PageTitle";
-import { Download, Search } from "lucide-react";
-import SearchBar from "./_components/SearchBar";
+import { Download } from "lucide-react";
 import Notes from "./_components/Notes";
 
 export default function NotesPage() {

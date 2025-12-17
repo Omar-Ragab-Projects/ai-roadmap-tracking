@@ -196,6 +196,25 @@ body {
   overflow: hidden;
 }
 
+/* Start progress bar */
+
+.progress-bar {
+  --value: attr(data-valuenow number);
+  --size: 320px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: radial-gradient(closest-side, white 96%, transparent 99% 100%),
+    conic-gradient(var(--color-primary) calc(var(--value) * 1%), transparent 0);
+}
+
+/* End progress bar */
+
 @keyframes fadein {
   0% {
     opacity: 0.6;
