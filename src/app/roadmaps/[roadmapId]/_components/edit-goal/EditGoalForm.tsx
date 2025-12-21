@@ -67,7 +67,7 @@ export default function EditGoalForm({
         <label>Priority:</label>
         <div className="flex-1 flex gap-2">
           {priorityOptions.map((option) => (
-            <div className="flex-1 ">
+            <div className="flex-1" key={option.value}>
               <input
                 type="radio"
                 name="priority"

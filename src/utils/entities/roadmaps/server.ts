@@ -5,6 +5,7 @@ import renderError from "@/utils/renderError";
 import { cache } from "react";
 import { actionPromiseResponse } from "@/types/globalTypes";
 import getAnonymousUser from "@/utils/anonymous-users/getAnonymousUser";
+import { cookies } from "next/headers";
 
 export const addRoadmapAction = async (
   prev: any,
@@ -154,6 +155,7 @@ export const saveRoadmapAction = async (
   formData: FormData
 ): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
+  const user = await getAnonymousUser();
 
   const roadmapData = formData.get("roadmapData") as string;
   if (!roadmapData)
@@ -166,6 +168,7 @@ export const saveRoadmapAction = async (
       .insert({
         title: parsedData.title,
         description: parsedData.description,
+        user_id: user?.id,
       })
       .select()
       .single();
@@ -177,6 +180,7 @@ export const saveRoadmapAction = async (
       description: goal.description,
       priority: goal.priority,
       status: goal.status,
+      user_id: user?.id,
     }));
 
     await supabase.from("goals").insert(goalsData);

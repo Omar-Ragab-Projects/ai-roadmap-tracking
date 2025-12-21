@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Eye, Pen, Pencil, PenLine, Trash2 } from "lucide-react";
+import { Eye, Pen, Pencil, PenLine, Trash2, Zap } from "lucide-react";
 import ConfirmButton from "@/components/ui/ConfirmButton";
 import { deleteGoalAction } from "@/utils/entities/goals/server";
 import { Goal, GoalStatus } from "@/types/roadmap";
@@ -14,6 +14,7 @@ import FormProvider from "@/components/global/form/FormProvider";
 import FormGroup from "@/components/global/form/FormGroup";
 import SubmitButton from "@/components/global/form/SubmitButton";
 import { addNoteAction } from "@/utils/entities/notes/server";
+import Link from "next/link";
 
 export default function GoalItem({ goal }: { goal?: Goal }) {
   if (!goal) return null;
@@ -87,10 +88,30 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
             </ResponseMarkdown>
           </Dialog>
 
-          <div className="flex items-center gap-4 mt-8">
+          <div className="flex items-center gap-2 mt-8">
             <GoalPriority priority={goal.priority} className="mt-0!" />
+            {goal.status != "done" && (
+              <Link
+                href={{
+                  pathname: "/focus",
+                  query: {
+                    roadmap: goal.roadmap_id,
+                    goal: goal.id,
+                  },
+                }}
+                data-tooltip="Focus"
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <Zap
+                  className="text-primary cursor-pointer p-2 w-9 h-9"
+                  data-tooltip="Focus"
+                />
+              </Link>
+            )}
             <Button
-              className="shadow-none text-xs opacity-50 hover:opacity-100 transition focus:outline-0 p-4"
+              className="shadow-none text-xs opacity-50 hover:opacity-100 transition focus:outline-0! p-2! w-max"
               Icon={PenLine}
               variant="skeleton"
               onClick={toggleAddNote}

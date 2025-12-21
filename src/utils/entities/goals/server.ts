@@ -29,8 +29,6 @@ export const addGoalAction = async (
     status: "todo",
   };
 
-  console.log(data);
-
   try {
     const res = await supabase.from("goals").insert(data);
     console.log(res);

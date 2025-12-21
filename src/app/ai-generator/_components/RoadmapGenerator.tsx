@@ -166,7 +166,7 @@ export default function RoadmapGenerator() {
             type="submit"
             Icon={Sparkles}
             className="mt-3 text-sm"
-            disabled={isLoading}
+            loading={isLoading}
           >
             {isLoading ? "Generating Roadmap..." : "Generate Roadmap"}
           </Button>

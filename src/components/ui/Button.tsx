@@ -12,7 +12,7 @@ interface ButtonProps {
   className?: string;
   type?: "button" | "submit";
   disabled?: boolean;
-  // loading?: boolean;
+  loading?: boolean;
   onClick?: () => void;
   href?: string | undefined;
   children?: React.ReactNode;
@@ -26,16 +26,16 @@ export default function Button({
   className = "",
   type = "submit",
   disabled = false,
-  // loading = false,
+  loading = false,
   onClick,
   href = undefined,
 }: ButtonProps) {
   const { pending } = useFormStatus();
-  const isDisabled = disabled || pending;
+  const isDisabled = pending || loading;
 
   const buttonClassname = () => {
     let joinClasses = `flex-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all font-semibold shadow ${className} ${
-      isDisabled ? "opacity-50 cursor-auto! " : ""
+      isDisabled || disabled ? "opacity-50 cursor-auto! " : ""
     }`;
 
     switch (variant) {
@@ -61,7 +61,7 @@ export default function Button({
       <button
         onClick={onClick}
         type={type}
-        disabled={isDisabled}
+        disabled={isDisabled || disabled}
         className={buttonClassname()}
         onPointerDown={(e) => {
           e.stopPropagation();

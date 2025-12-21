@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Google_Sans_Code } from "next/font/google";
 import "./globals.css";
 import ASide from "@/components/global/aside/ASide";
 import Providers from "./Providers";
+import FocusPortal from "./_components/FocusPortal";
 
 const googleSansCode = Google_Sans_Code({
   variable: "--font-google-sans-code",
@@ -28,6 +29,7 @@ export default function RootLayout({
           <main className="p-8 bg-background flex-1 overflow-auto">
             {children}
           </main>
+          <FocusPortal />
         </Providers>
       </body>
     </html>

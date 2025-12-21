@@ -16,4 +16,6 @@ export default async function generateSessionUser() {
   } catch (error) {
     console.log("Error generating session user:", error);
   }
+
+  return true;
 }

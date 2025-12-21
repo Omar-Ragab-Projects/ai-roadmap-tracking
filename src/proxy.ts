@@ -7,7 +7,7 @@ export async function proxy(request: NextRequest) {
 
   if (!sessionToken) {
     await generateSessionUser();
-    return NextResponse.next();
+    return NextResponse.redirect(new URL(request.url));
   }
   return NextResponse.next();
 }

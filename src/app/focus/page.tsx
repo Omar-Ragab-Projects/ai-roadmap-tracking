@@ -1,123 +1,139 @@
 "use client";
-
-import { Pause, Play, RotateCcw, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-
-const initTimer = {
-  minutes: 25,
-  seconds: 0,
-};
+import { getWithExpiry } from "@/utils/common";
+import { fetchRoadmapsClient } from "@/utils/entities/roadmaps/client";
+import { useQuery } from "@tanstack/react-query";
+import { useContext, useEffect, useMemo, useRef } from "react";
+import SelectFocus from "./_components/SelectFocus";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FocusContext } from "@/context/FocusContext";
+import FocusTimer from "./_components/FocusTimer";
+import FocusActions from "./_components/FocusActions";
+import useFocusActions from "./hooks/useFocusActions";
 
 export default function FocusPage() {
-  const timerInterval = 1000;
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [timer, setTimer] = useState(initTimer);
-  const [rounds, setRounds] = useState(0);
+  const {
+    data: roadmaps,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["roadmaps"],
+    queryFn: fetchRoadmapsClient,
+  });
 
-  const [isTimerActive, setIsTimerActive] = useState(false);
+  if (error) {
+    return <div>Error loading roadmaps please refresh the page.</div>;
+  }
+
+  // Router and Search Params
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const goal = useMemo(() => searchParams.get("goal"), []);
+  const roadmap = useMemo(() => searchParams.get("roadmap"), []);
+  const chooseFocusRef = useRef<HTMLDivElement | null>(null);
+
+  const focusContext = useContext(FocusContext);
+
+  if (!focusContext) {
+    throw new Error("FocusContext must be used within a FocusProvider");
+  }
+
+  const {
+    initTimer,
+    choosedRoadmap,
+    setChoosedRoadmap,
+    choosedGoal,
+    setChoosedGoal,
+    timer,
+    rounds,
+    setRounds,
+    isTimerActive,
+    getSelectedFocusTitle,
+  } = focusContext;
+
+  const { startFocus, pauseFocus, restartFocus, resetTimer } = useFocusActions({
+    chooseFocusRef,
+  });
+
+  // Focus Selection from URL
+  useEffect(() => {
+    if (roadmaps) {
+      if (roadmap && goal) {
+        const selectedRoadmap = roadmaps.find((rm) => rm.id == +roadmap);
+        const selectedGoal = selectedRoadmap?.goals?.find((g) => g.id == +goal);
+        setChoosedGoal(selectedGoal || null);
+        setChoosedRoadmap(selectedRoadmap || null);
+        router.replace("/focus");
+      }
+    }
+  }, [roadmaps, roadmap, goal]);
+
+  const roadmapSelected = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedRoadmap = roadmaps?.find(
+      (roadmap) => roadmap.id == +e.target.value
+    );
+    setChoosedRoadmap(selectedRoadmap || null);
+  };
+
+  const goalSelected = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedGoal = choosedRoadmap?.goals?.find(
+      (goal) => goal.id == +e.target.value
+    );
+    setChoosedGoal(selectedGoal || null);
+  };
 
   useEffect(() => {
-    const storedRounds = localStorage.getItem("roundsCompleted");
+    if (isTimerActive || timer != initTimer) clearFocusPopup();
+  }, [isTimerActive, timer]);
+
+  const clearFocusPopup = () => {
+    if (chooseFocusRef.current) {
+      chooseFocusRef.current.style.display = "none";
+    }
+  };
+
+  useEffect(() => {
+    const storedRounds = getWithExpiry("roundsCompleted");
     if (storedRounds) {
       setRounds(parseInt(storedRounds, 10));
     }
   }, []);
 
-  const handleZero = (time: number) => {
-    return time < 10 ? `0${time}` : time;
-  };
-
-  const resetTimer = () => {
-    setIsTimerActive(false);
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    setTimer(initTimer);
-  };
-
-  const startFocus = () => {
-    setIsTimerActive(true);
-    intervalRef.current = setInterval(() => {
-      setTimer((prev) => {
-        if (prev.seconds === 0) {
-          if (prev.minutes === 0) {
-            roundFinsihed();
-            return initTimer;
-          } else {
-            return {
-              minutes: prev.minutes - 1,
-              seconds: 59,
-            };
-          }
-        } else {
-          return {
-            minutes: prev.minutes,
-            seconds: prev.seconds - 1,
-          };
-        }
-      });
-    }, timerInterval);
-  };
-
-  const pauseFocus = () => {
-    setIsTimerActive(false);
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-  };
-
-  const roundFinsihed = () => {
-    const roundsCompleted = rounds + 1;
-    setRounds(roundsCompleted);
-    localStorage.setItem("roundsCompleted", roundsCompleted.toString());
-    resetTimer();
-  };
-
-  const completionPercentage =
-    ((initTimer.minutes * 60 - (timer.minutes * 60 + timer.seconds)) /
-      (initTimer.minutes * 60)) *
-    100;
-
   return (
     <div className="card w-fit px-[10vw] mx-auto text-center relative">
+      {!goal && !roadmap && (
+        <SelectFocus
+          chooseFocusRef={chooseFocusRef}
+          isLoading={isLoading}
+          roadmaps={roadmaps}
+          choosedRoadmap={choosedRoadmap}
+          choosedGoal={choosedGoal}
+          roadmapSelected={roadmapSelected}
+          goalSelected={goalSelected}
+          clearFocusPopup={clearFocusPopup}
+        />
+      )}
+
       <h1 className="text-primary font-semibold">Focus Session</h1>
 
       {/* Timer */}
-      <div
-        className="progress-bar mt-16 flex flex-col relative "
-        role="progressbar"
-        data-valuenow={completionPercentage}
-        data-valuemin="0"
-        data-valuemax="100"
-      >
-        <span className="absolute inset-0 w-full h-full bg-linear-to-t from-primary/10 from-40% to-secondary/6 rounded-full blur-xs " />
-        <span className="text-9xl font-bold text-foreground  tracking-[-0.075em] ">
-          {timer.minutes}
-        </span>
-        <span className="text-7xl font-bold text-muted-foreground -mt-3  tracking-tighter">
-          {handleZero(timer.seconds)}
-        </span>
-      </div>
+      <FocusTimer initTimer={initTimer} timer={timer} />
 
       {/* Title */}
       <div className="mt-14 flex flex-col gap-4">
         <span className="uppercase text-sm text-text">Focusing on</span>
         <span className="font-semibold text-foreground text-3xl">
-          Master React Hooks
+          {isLoading ? "Loading :)" : getSelectedFocusTitle()}
         </span>
       </div>
 
       {/* Actions */}
-      <div className="flex-center gap-8 mt-10">
-        <RotateCcw onClick={resetTimer} size={18} className="cursor-pointer" />
-        <span
-          className="bg-primary p-4 rounded-full text-white cursor-pointer hover:bg-primary/90 transition"
-          onClick={isTimerActive ? pauseFocus : startFocus}
-        >
-          {!isTimerActive ? <Play size={18} /> : <Pause size={18} />}
-        </span>
-        <X size={18} className="cursor-pointer" />
-      </div>
+      <FocusActions
+        isTimerActive={isTimerActive}
+        startFocus={startFocus}
+        pauseFocus={pauseFocus}
+        restartFocus={restartFocus}
+        resetTimer={resetTimer}
+      />
 
       {/* Rounds */}
       <div className="text-text flex flex-col bg-primary/4 absolute top-8 right-0 px-3 py-1 rounded-l-lg group cursor-pointer hover:bg-primary/5 transition">
