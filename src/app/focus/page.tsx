@@ -110,7 +110,7 @@ export default function FocusPage({
   }, []);
 
   return (
-    <div className="card w-fit px-[10vw] mx-auto text-center relative">
+    <div className="card md:w-fit px-[10vw] mx-auto text-center relative w-full">
       {!goal && !roadmap && (
         <SelectFocus
           chooseFocusRef={chooseFocusRef}

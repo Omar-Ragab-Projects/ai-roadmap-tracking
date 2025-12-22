@@ -26,7 +26,7 @@ export default async function RoadmapPage({
           You can try drag and drop to reorder goals on desktop.
         </span>
         <div className="flex-between flex-col xl:flex-row gap-8 lg:gap-12">
-          <div className="flex-1 flex-center flex-col lg:flex-row items-start lg:items-center  lg:justify-start gap-6">
+          <div className="flex-1 flex-center flex-col lg:flex-row items-start lg:items-center w-full justify-start gap-6">
             <BackTo href="/roadmaps" />
             <div className="max-w-[600px] text-center md:text-left w-full md:w-auto">
               <h1 className="text-3xl text-foreground font-bold">
