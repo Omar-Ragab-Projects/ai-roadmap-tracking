@@ -2,15 +2,19 @@
 import { getWithExpiry } from "@/utils/common";
 import { fetchRoadmapsClient } from "@/utils/entities/roadmaps/client";
 import { useQuery } from "@tanstack/react-query";
-import { useContext, useEffect, useMemo, useRef } from "react";
+import { use, useContext, useEffect, useMemo, useRef } from "react";
 import SelectFocus from "./_components/SelectFocus";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FocusContext } from "@/context/FocusContext";
 import FocusTimer from "./_components/FocusTimer";
 import FocusActions from "./_components/FocusActions";
 import useFocusActions from "./hooks/useFocusActions";
 
-export default function FocusPage() {
+export default function FocusPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ goal?: string; roadmap?: string }>;
+}) {
   const {
     data: roadmaps,
     error,
@@ -26,9 +30,7 @@ export default function FocusPage() {
 
   // Router and Search Params
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const goal = useMemo(() => searchParams.get("goal"), []);
-  const roadmap = useMemo(() => searchParams.get("roadmap"), []);
+  const searchParamsObject = use(searchParams);
   const chooseFocusRef = useRef<HTMLDivElement | null>(null);
 
   const focusContext = useContext(FocusContext);
@@ -53,6 +55,15 @@ export default function FocusPage() {
   const { startFocus, pauseFocus, restartFocus, resetTimer } = useFocusActions({
     chooseFocusRef,
   });
+
+  const goal = useMemo(
+    () => searchParamsObject.goal,
+    [choosedRoadmap, choosedGoal]
+  );
+  const roadmap = useMemo(
+    () => searchParamsObject.roadmap,
+    [choosedRoadmap, choosedGoal]
+  );
 
   // Focus Selection from URL
   useEffect(() => {

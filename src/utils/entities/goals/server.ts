@@ -31,7 +31,6 @@ export const addGoalAction = async (
 
   try {
     const res = await supabase.from("goals").insert(data);
-    console.log(res);
     revalidatePath(`/roadmaps/${roadmapId}`);
     return { status: "success", message: "Goal created successfully!" };
   } catch (error) {
@@ -60,7 +59,6 @@ export const updateGoalAction = async (
 
   try {
     const res = await supabase.from("goals").update(data).eq("id", goalId);
-    console.log(res);
     revalidatePath(`/roadmaps/${roadmapId}`);
     return { status: "success", message: "Goal updated successfully!" };
   } catch (error) {
@@ -77,8 +75,7 @@ export const deleteGoalAction = async (
   const roadmapId = formData.get("roadmapId");
 
   try {
-    const res = await supabase.from("goals").delete().eq("id", goalId);
-    console.log(res);
+    await supabase.from("goals").delete().eq("id", goalId);
     revalidatePath(`/roadmaps/${roadmapId}`);
     return { status: "success", message: "Goal deleted successfully!" };
   } catch (error) {
@@ -92,11 +89,7 @@ export const updateGoalStatus = async (
 ): Promise<actionPromiseResponse> => {
   const supabase = await createClient();
   try {
-    const res = await supabase
-      .from("goals")
-      .update({ status })
-      .eq("id", goalId);
-    console.log(res);
+    await supabase.from("goals").update({ status }).eq("id", goalId);
     revalidatePath(`/roadmaps/${goalId}`);
     return { status: "success", message: "Goal status updated successfully!" };
   } catch (error) {

@@ -24,7 +24,7 @@ export default function RecentGoals({ goals }: { goals: Goal[] }) {
             <Link
               className="flex-between bg-muted/50 p-4 rounded-xl shadow-md border border-border hover:bg-muted/70 transition-colors cursor-pointer"
               href={`/roadmaps/${goal.roadmap_id}`}
-              target="_blank"
+              // target="_blank"
             >
               <div>
                 <h4 className="font-medium">{goal.name}</h4>

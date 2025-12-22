@@ -15,10 +15,10 @@ import Link from "next/link";
 
 export default function Note({
   note,
-  refetch,
+  onUpdateNote,
 }: {
   note: Note;
-  refetch: () => void;
+  onUpdateNote: () => void;
 }) {
   const [previewNote, setPreviewNote] = useState<Note | null>(null);
   const [edit, setEdit] = useState(false);
@@ -47,7 +47,7 @@ export default function Note({
           <ConfirmButton
             onConfirm={deleteNoteAction}
             values={{ noteId: note.id }}
-            onSuccess={refetch}
+            onSuccess={onUpdateNote}
           >
             <Trash2
               size={16}
@@ -79,7 +79,7 @@ export default function Note({
           ]}
           onSuccess={() => {
             setPreviewNote(null);
-            refetch();
+            onUpdateNote();
           }}
         >
           <Activity mode={edit ? "hidden" : "visible"}>

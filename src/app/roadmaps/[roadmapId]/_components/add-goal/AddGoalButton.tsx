@@ -15,7 +15,12 @@ export default function AddGoalButton({ roadmapId }: { roadmapId: number }) {
       <Dialog open={showAddGoal} onClose={hideAddGoalForm}>
         <AddGoalForm hideAddGoalForm={hideAddGoalForm} roadmapId={roadmapId} />
       </Dialog>
-      <Button onClick={showAddGoalForm} title={"Add Goal"} Icon={Plus} />
+      <Button
+        className="max-lg:flex-1 min-w-[140px]"
+        onClick={showAddGoalForm}
+        title={"Add Goal"}
+        Icon={Plus}
+      />
     </>
   );
 }

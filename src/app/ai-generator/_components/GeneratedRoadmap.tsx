@@ -23,20 +23,21 @@ export default function GeneratedRoadmap({
   const router = useRouter();
   return (
     <div>
-      <div className="flex-between">
+      <div className="flex-between max-lg:flex-wrap gap-4">
         {/* Title & Description */}
-        <div className="max-w-[80%]">
+        <div className="lg:max-w-[80%]">
           <h4 className="font-semibold text-lg">
             {generatedRoadmapData.title}
           </h4>
           <p>{generatedRoadmapData.description}</p>
         </div>
         {/* Save & Reset */}
-        <div className="flex gap-2">
+        <div className="flex max-lg:flex-1 justify-stretch gap-2">
           <Button onClick={resetRoadmapData} Icon={RotateCcw} variant="ghost">
             Reset
           </Button>
           <FormProvider
+            className="flex-1"
             action={saveRoadmapAction}
             onSuccess={(payload) => {
               resetRoadmapData();
@@ -49,7 +50,9 @@ export default function GeneratedRoadmap({
               },
             ]}
           >
-            <SubmitButton Icon={SaveAll}>Save</SubmitButton>
+            <SubmitButton className="w-full" Icon={SaveAll}>
+              Save
+            </SubmitButton>
           </FormProvider>
         </div>
       </div>
@@ -59,7 +62,7 @@ export default function GeneratedRoadmap({
           <li
             data-delay={index * 200}
             key={index}
-            className="mb-2 relative whitespace-pre-line text-wrap flex-between bg-primary/6 border border-border p-3 rounded-lg shadow-sm "
+            className="mb-2 relative whitespace-pre-line text-wrap flex-between max-lg:flex-wrap bg-primary/6 border border-border p-3 rounded-lg shadow-sm "
           >
             <ConfirmButton
               className="absolute top-2 right-2 hover:text-red-500 transition-all cursor-pointer"
@@ -68,7 +71,7 @@ export default function GeneratedRoadmap({
             >
               <X className="" />
             </ConfirmButton>
-            <div className="max-w-[70%]">
+            <div className="lg:max-w-[70%]">
               <h5 className="font-semibold">{goal.name}</h5>
               <ResponseMarkdown className="mt-2 text-text text-sm">
                 {goal.description || ""}

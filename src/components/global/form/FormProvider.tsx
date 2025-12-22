@@ -42,6 +42,8 @@ export default function FormProvider({
   }, [state]);
   return (
     <form ref={ref} action={formAction} className={className}>
+      {children}
+
       {hiddenFields.map((field) => (
         <input
           key={field.name}
@@ -50,7 +52,6 @@ export default function FormProvider({
           defaultValue={field.value}
         />
       ))}
-      {children}
     </form>
   );
 }

@@ -2,7 +2,6 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import React from "react";
 import GoalItem from "../GoalItem";
 import { useDroppable } from "@dnd-kit/core";
 

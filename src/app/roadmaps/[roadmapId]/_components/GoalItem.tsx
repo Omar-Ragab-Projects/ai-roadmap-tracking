@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Eye, Pen, Pencil, PenLine, Trash2, Zap } from "lucide-react";
+import { Eye, Pencil, PenLine, Trash2, Zap } from "lucide-react";
 import ConfirmButton from "@/components/ui/ConfirmButton";
 import { deleteGoalAction } from "@/utils/entities/goals/server";
 import { Goal, GoalStatus } from "@/types/roadmap";
@@ -15,6 +15,7 @@ import FormGroup from "@/components/global/form/FormGroup";
 import SubmitButton from "@/components/global/form/SubmitButton";
 import { addNoteAction } from "@/utils/entities/notes/server";
 import Link from "next/link";
+import MobileGoalStatus from "./MobileGoalStatus";
 
 export default function GoalItem({ goal }: { goal?: Goal }) {
   if (!goal) return null;
@@ -52,7 +53,7 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
 
   return (
     <li
-      className={`group cursor-grab list-none bg-[#dedee8] hover:bg-[#e2e2e2] active:bg-[#d4d4dd] active:opacity-95 rounded-lg p-6 mb-3 ${getStatusStyles(
+      className={`group lg:cursor-grab list-none bg-[#dedee8] hover:bg-[#e2e2e2] active:bg-[#d4d4dd] active:opacity-95 rounded-lg p-6 mb-3 ${getStatusStyles(
         goal.status
       )}`}
       ref={setNodeRef}
@@ -87,55 +88,6 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
               {goal.description?.split("References:")[1] || "No references."}
             </ResponseMarkdown>
           </Dialog>
-
-          <div className="flex items-center gap-2 mt-8">
-            <GoalPriority priority={goal.priority} className="mt-0!" />
-            {goal.status != "done" && (
-              <Link
-                href={{
-                  pathname: "/focus",
-                  query: {
-                    roadmap: goal.roadmap_id,
-                    goal: goal.id,
-                  },
-                }}
-                data-tooltip="Focus"
-                onPointerDown={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                <Zap
-                  className="text-primary cursor-pointer p-2 w-9 h-9"
-                  data-tooltip="Focus"
-                />
-              </Link>
-            )}
-            <Button
-              className="shadow-none text-xs opacity-50 hover:opacity-100 transition focus:outline-0! p-2! w-max"
-              Icon={PenLine}
-              variant="skeleton"
-              onClick={toggleAddNote}
-            >
-              Add note
-            </Button>
-
-            <Dialog open={addNote} onClose={toggleAddNote}>
-              <FormProvider
-                action={addNoteAction}
-                onSuccess={toggleAddNote}
-                hiddenFields={[{ name: "goalId", value: goal.id.toString() }]}
-              >
-                <h3 className="mb-4">Add note to {goal.name}</h3>
-                <FormGroup
-                  textarea
-                  name="goalNote"
-                  placeholder="When I searched for ...."
-                  required
-                />
-                <SubmitButton className="mt-4">Add Note</SubmitButton>
-              </FormProvider>
-            </Dialog>
-          </div>
         </div>
 
         {/* Controllers */}
@@ -143,15 +95,16 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
           onPointerDown={(e) => {
             e.stopPropagation();
           }}
-          className="flex-center gap-2 "
+          className="flex flex-col lg:flex-row gap-1 lg:gap-2 max-lg:opacity-75 hover:opacity-100 transition"
         >
           <Pencil
             onClick={() => showEditRoadmap(goal.id)}
             size={14}
-            className="opacity-0 group-hover:opacity-100 cursor-pointer w-7 h-7 p-1 text-primary/75 hover:text-primary transition"
+            className="lg:opacity-0 group-hover:opacity-100 cursor-pointer w-6 h-6 lg:w-7 lg:h-7 p-1 text-primary/75 hover:text-primary transition"
           />
           <ConfirmButton
             onConfirm={deleteGoalAction}
+            note="all notes for this goal will be deleted"
             confirmTitle="Delete"
             values={{
               goalId: goal.id,
@@ -160,9 +113,64 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
           >
             <Trash2
               size={14}
-              className="opacity-0 group-hover:opacity-100 cursor-pointer w-7 h-7 p-1 text-red-400 hover:text-red-500 transition"
+              className="lg:opacity-0 group-hover:opacity-100 cursor-pointer w-6 h-6 lg:w-7 lg:h-7 p-1 text-red-400 hover:text-red-500 transition"
             />
           </ConfirmButton>
+        </div>
+      </div>
+
+      <div className="flex-between flex-wrap gap-6 mt-8">
+        <div className="flex items-center gap-2 flex-wrap">
+          <GoalPriority priority={goal.priority} className="mt-0!" />
+          {goal.status && (
+            <Link
+              href={{
+                pathname: "/focus",
+                query: {
+                  roadmap: goal.roadmap_id,
+                  goal: goal.id,
+                },
+              }}
+              data-tooltip="Focus"
+              onPointerDown={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <Zap
+                className="text-primary cursor-pointer p-2 w-9 h-9"
+                data-tooltip="Focus"
+              />
+            </Link>
+          )}
+          <Button
+            className="shadow-none text-xs opacity-50 hover:opacity-100 transition focus:outline-0! p-2! w-max"
+            Icon={PenLine}
+            variant="skeleton"
+            onClick={toggleAddNote}
+          >
+            Add note
+          </Button>
+
+          <Dialog open={addNote} onClose={toggleAddNote}>
+            <FormProvider
+              action={addNoteAction}
+              onSuccess={toggleAddNote}
+              hiddenFields={[{ name: "goalId", value: goal.id.toString() }]}
+            >
+              <h3 className="mb-4">Add note to {goal.name}</h3>
+              <FormGroup
+                textarea
+                name="goalNote"
+                placeholder="When I searched for ...."
+                required
+              />
+              <SubmitButton className="mt-4">Add Note</SubmitButton>
+            </FormProvider>
+          </Dialog>
+        </div>
+
+        <div className="lg:hidden ">
+          <MobileGoalStatus goal={goal} />
         </div>
       </div>
     </li>

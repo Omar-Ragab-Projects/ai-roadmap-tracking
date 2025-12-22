@@ -1,5 +1,6 @@
 "use client";
 import { Roadmap } from "@/types/roadmap";
+import { isMobile } from "@/utils/common";
 import { useRouter } from "next/navigation";
 import {
   BarChart,
@@ -21,8 +22,6 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
       roadmap.goals?.filter((goal) => goal.status == "done").length || 0,
   }));
 
-  // console.log("Chart data:", data);
-
   const redirectToRoadmapByIndex = (index: number) => {
     if (index === undefined || index === null) return;
     const roadmap = roadmaps[index];
@@ -32,7 +31,7 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
   };
 
   return (
-    <div className="card ">
+    <div className="card min-h-[380px]">
       <h3>Active Roadmaps</h3>
       <p>Goals by roadmap</p>
       <BarChart
@@ -42,10 +41,10 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
           width: "100%",
           // maxWidth: data.length > 0 ? `${data.length * 300}px` : "100%",
           cursor: "pointer",
-          height: "80%",
+          height: "75%",
           // maxHeight: "50vh",
           aspectRatio: 1.618,
-          marginTop: "2rem",
+          marginTop: "1.5rem",
         }}
         responsive
         data={data}
@@ -59,7 +58,8 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
-        <YAxis width="auto" />
+        {!isMobile && <YAxis width="auto" />}
+
         <Tooltip />
         <Legend />
         <Bar dataKey="completed" stackId="a" fill="#5554b6" background />

@@ -143,6 +143,10 @@ export default function RoadmapGenerator() {
     clearChatHistory();
   };
 
+  const closeXOGame = () => {
+    setStartGeneration(false);
+  };
+
   return (
     <section>
       <div className="card mt-10">
@@ -174,7 +178,7 @@ export default function RoadmapGenerator() {
 
         <Dialog
           open={startGeneration && !generatedRoadmap?.tryAgain}
-          onClose={() => setStartGeneration(false)}
+          onClose={closeXOGame}
         >
           <div
             className={`flex items-center gap-2  p-4 rounded-md ${
@@ -194,7 +198,7 @@ export default function RoadmapGenerator() {
           </div>
 
           <h3 className="mt-12 text-center">Have a break and play X|O</h3>
-          <XOGame />
+          <XOGame onFinish={closeXOGame} />
         </Dialog>
 
         <div className="mt-4">

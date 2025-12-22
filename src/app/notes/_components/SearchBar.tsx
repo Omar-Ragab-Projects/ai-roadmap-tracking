@@ -1,6 +1,14 @@
+"use client";
+
 import { Search } from "lucide-react";
 
-export default function SearchBar() {
+export default function SearchBar({
+  search,
+  changeSearch,
+}: {
+  search: string;
+  changeSearch: (value: string) => void;
+}) {
   return (
     <label htmlFor="searchNote" className="relative">
       <Search
@@ -13,6 +21,8 @@ export default function SearchBar() {
         id="searchNote"
         placeholder="Search notes..."
         className="ps-12"
+        value={search}
+        onChange={(e) => changeSearch(e.target.value)}
       />
     </label>
   );

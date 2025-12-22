@@ -14,7 +14,7 @@ export default function AiAssistantPage() {
 
   return (
     <>
-      <header className="flex-between">
+      <header className="lg:flex-between">
         <PageTitle
           title="AI Learning Assistant"
           description="Ask questions and get personalized learning guidance"

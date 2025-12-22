@@ -34,7 +34,7 @@ export default function Button({
   const isDisabled = pending || loading;
 
   const buttonClassname = () => {
-    let joinClasses = `flex-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all font-semibold shadow ${className} ${
+    let joinClasses = `flex-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all font-semibold shadow text-sm lg:text-base ${className} ${
       isDisabled || disabled ? "opacity-50 cursor-auto! " : ""
     }`;
 

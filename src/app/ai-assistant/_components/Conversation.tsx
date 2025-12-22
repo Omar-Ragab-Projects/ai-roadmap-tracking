@@ -15,7 +15,7 @@ export default function Conversation({
     return parts.map((part) => part.text).join(" ");
   };
   return (
-    <div className="mt-8">
+    <div className="lg:mt-8 ">
       {!chatData.length && (
         <p className="text-center text-muted-foreground/40 text-sm">
           Start the conversation by typing your message below.
@@ -29,7 +29,7 @@ export default function Conversation({
           return (
             <div key={index} className="user-message">
               {isUserMessage && getTextFromParts(chat.parts) && (
-                <div className="mt-6 px-6 py-2 w-fit max-w-[90%] whitespace-pre-wrap rounded-lg border-border border bg-muted shadow-sm">
+                <div className="mt-6 px-4 lg:px-6 py-2 w-fit max-w-[90%] whitespace-pre-wrap rounded-lg border-border border bg-muted shadow-sm">
                   {getTextFromParts(chat.parts)}
                 </div>
               )}

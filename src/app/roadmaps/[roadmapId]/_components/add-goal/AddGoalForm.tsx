@@ -41,8 +41,10 @@ export default function AddGoalForm({
         name={"description"}
         placeholder="Watch 4 hours daily of Elzero course..."
       />
-      <div className="mt-6 flex items-center gap-4">
-        <label>Priority:</label>
+      <div className="mt-6 flex items-center gap-2 lg:gap-4 flex-col lg:flex-row">
+        <label>
+          Priority<span className="hidden lg:inline">:</span>
+        </label>
         <div className="flex-1 flex gap-2">
           {priorityOptions.map((option) => (
             <div key={option.value} className="flex-1 ">

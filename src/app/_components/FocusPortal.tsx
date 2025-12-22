@@ -23,9 +23,13 @@ export default function FocusPortal() {
 
   if (timer != initTimer && !pathname.includes("focus"))
     return (
-      <div className="fixed bottom-6 right-4 z-50 animate-focusPortal group shadow-xl rounded-full ">
+      <div className="focus-portal fixed bottom-15 lg:bottom-6 right-4 z-50 animate-focusPortal group shadow-xl rounded-full ">
         <FocusTimer initTimer={initTimer} timer={timer} className="mt-0!" />
-        <div className="absolute inset-0 bg-white/75 rounded-full flex-center w-full h-full backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
+        <div
+          className="absolute lg:inset-0 lg:bg-white/75 rounded-full lg:flex-center lg:w-full lg:h-full lg:backdrop-blur-sm lg:opacity-0 lg:group-hover:opacity-100 transition-opacity
+        max-lg:scale-50 max-lg:-top-8 max-lg:left-center
+        "
+        >
           <FocusActions
             isTimerActive={isTimerActive}
             startFocus={startFocus}

@@ -5,17 +5,19 @@ import RoadmapsList from "./_components/RoadmapsList";
 export default function RoadmapsPage() {
   return (
     <>
-      <header className="flex-between">
+      <header className="lg:flex-between">
         <PageTitle
           title="Learning Roadmaps"
           description="Create and manage your learning paths"
         />
-        <Button href="/roadmaps/new" title={"+ New Roadmap"} />
+        <Button
+          className="max-lg:mt-6"
+          href="/roadmaps/new"
+          title={"+ New Roadmap"}
+        />
       </header>
 
-      <section>
-        <RoadmapsList />
-      </section>
+      <RoadmapsList />
     </>
   );
 }

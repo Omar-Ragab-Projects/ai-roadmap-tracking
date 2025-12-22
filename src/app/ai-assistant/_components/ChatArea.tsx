@@ -114,7 +114,7 @@ export default function ChatArea({
     <section className="mt-10 border border-border rounded-lg shadow-sm">
       <div
         ref={chatWrapperRef}
-        className="chat-wrapper flex flex-col gap-10 h-[60vh] overflow-y-auto scroll-bar-styles px-6 bg-muted/25"
+        className="chat-wrapper rounded-t-xl flex flex-col gap-10 h-[35vh] lg:h-[60vh] overflow-y-auto scroll-bar-styles px-4 lg:px-6 bg-primary/15"
       >
         <Conversation
           chatData={history}

@@ -57,7 +57,6 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
 
   function handleDragEnd(event: any) {
     const { active, over } = event;
-    console.log("Drag End:", { active, over });
     const activeContainer = active.data.current.sortable?.containerId;
     const overContainer =
       over?.data?.current?.sortable?.containerId || over?.id;
@@ -96,7 +95,6 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
         ];
         const dest = [...(box[overContainer as keyof GloalsListTypes] || [])];
 
-        console.log({ source, dest, oldIndex, newIndex });
         // If the item cannot be found in source, abort
         if (oldIndex === -1) return prev;
 
@@ -129,7 +127,7 @@ export default function GoalsList({ roadmap }: { roadmap: Roadmap }) {
   }
 
   return (
-    <div className="mt-10 flex gap-3 ">
+    <div className="mt-10 gap-3 hidden xl:flex">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}

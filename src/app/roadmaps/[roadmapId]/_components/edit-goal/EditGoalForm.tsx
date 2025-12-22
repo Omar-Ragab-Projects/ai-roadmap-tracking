@@ -3,7 +3,6 @@ import FormProvider from "@/components/global/form/FormProvider";
 import SubmitButton from "@/components/global/form/SubmitButton";
 import { Goal } from "@/types/roadmap";
 import { updateGoalAction } from "@/utils/entities/goals/server";
-import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const priorityOptions = [
@@ -63,8 +62,10 @@ export default function EditGoalForm({
         placeholder="Watch 4 hours daily of Elzero course..."
         defaultValue={goal.description || ""}
       />
-      <div className="mt-6 flex items-center gap-4">
-        <label>Priority:</label>
+      <div className="mt-6 flex items-center gap-2 lg:gap-4 flex-col lg:flex-row">
+        <label>
+          Priority<span className="hidden lg:inline">:</span>
+        </label>
         <div className="flex-1 flex gap-2">
           {priorityOptions.map((option) => (
             <div className="flex-1" key={option.value}>

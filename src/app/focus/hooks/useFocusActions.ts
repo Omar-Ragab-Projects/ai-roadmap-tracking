@@ -31,6 +31,7 @@ export default function useFocusActions({
       clearInterval(intervalRef.current);
     }
     setTimer(initTimer);
+    localStorage.removeItem("focusTimer");
   };
 
   const startFocus = () => {

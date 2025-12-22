@@ -57,9 +57,7 @@
 }
 
 body {
-  /* background: var(--background);
-  color: var(--foreground); */
-  /* font-family: Arial, Helvetica, sans-serif; */
+  @apply max-lg:bg-linear-to-r from-primary/10 to-secondary/10 bg-background;
 }
 
 @utility flex-center {
@@ -81,15 +79,19 @@ body {
 @layer base {
   input,
   textarea {
-    @apply w-full p-4 rounded-lg outline-1 outline-gray/60 focus:placeholder:text-gray/90 focus:outline-primary/10 focus:outline-1 focus:text-sidebar text-sidebar/80 font-normal focus:shadow-md transition duration-300;
+    @apply w-full p-3 lg:p-4 rounded-lg outline-1 outline-gray/60 focus:placeholder:text-gray/90 focus:outline-primary/10 focus:outline-1 focus:text-sidebar text-sidebar/80 font-normal focus:shadow-md transition duration-300;
   }
 
   textarea {
-    @apply min-h-[100px] max-h-[150px];
+    @apply min-h-[100px] max-h-[150px] overflow-y-auto;
   }
 
   label {
-    @apply font-semibold has-focus:text-sidebar text-sidebar/80 flex flex-col gap-2;
+    @apply text-sm lg:text-base font-semibold has-focus:text-sidebar text-sidebar/80 flex flex-col gap-2;
+  }
+
+  h1 {
+    @apply font-bold text-2xl lg:text-4xl;
   }
 
   h3 {
@@ -137,11 +139,15 @@ body {
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-md border border-border p-6;
+    @apply bg-white rounded-xl shadow-md border border-border p-4 lg:p-6 max-lg:overflow-x-auto;
   }
 
   .ai-loading {
     @apply block ms-4 mb-6 mt-4 h-4 w-4 border-2 border-dashed border-primary rounded-full animate-spin;
+  }
+
+  .note {
+    @apply block text-center text-shadow-2xs  mx-auto bg-primary/15 p-4 rounded-xl shadow text-xs text-black/75 mb-4;
   }
 }
 
@@ -200,12 +206,18 @@ body {
 
 /* Start progress bar */
 
+.focus-portal .progress-bar {
+  --size: 280px;
+}
+
 .progress-bar {
   --value: attr(data-valuenow number);
   --size: 320px;
+
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
+  margin-inline: auto;
 
   display: flex;
   justify-content: center;
@@ -213,6 +225,21 @@ body {
 
   background: radial-gradient(closest-side, white 96%, transparent 99% 100%),
     conic-gradient(var(--color-primary) calc(var(--value) * 1%), transparent 0);
+}
+
+@media (max-width: 768px) {
+  .progress-bar {
+    --size: 200px;
+  }
+
+  .focus-portal .progress-bar {
+    --size: 160px;
+    opacity: 0.75;
+  }
+
+  .focus-portal:hover .progress-bar {
+    opacity: 1;
+  }
 }
 
 /* End progress bar */

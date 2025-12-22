@@ -12,9 +12,9 @@ export default function ProgressBar({ percentage }: { percentage: number }) {
     }
   }, [percentage]);
   return (
-    <div className="mt-6 lg:min-w-[250px]">
+    <div className="lg:mt-6 lg:min-w-[250px] max-lg:flex-1">
       {/* Percentage Count */}
-      <div className="flex-between">
+      <div className="flex-between gap-2">
         <span className="text-sm text-foreground">Progress</span>
         <span
           className={`${
@@ -25,7 +25,7 @@ export default function ProgressBar({ percentage }: { percentage: number }) {
         </span>
       </div>
       {/* Percentage Bar */}
-      <div className="relative h-3 rounded-full bg-muted mt-2">
+      <div className="relative h-3 rounded-full bg-primary/15 mt-2">
         <span
           ref={progressBarRef}
           className={`absolute percentage-bar w-[0%] left-0 h-full transition-all duration-500 rounded-full ${

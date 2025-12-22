@@ -19,10 +19,12 @@ export default function IconTitle({
 }: IconTitleProps) {
   return (
     <div className={`flex gap-4 ${className}`}>
-      <Icon className="bg-primary text-white w-12 h-12 p-2.5 rounded-lg bg-linear-to-br from-primary via-70% via-white/20 to-primary" />
-      <div>
-        <h1 className="text-4xl font-bold ">{title}</h1>
-        <p className="text-text text-lg max-w-5/6 mt-2">{description}</p>
+      <Icon className="hidden lg:block bg-primary text-white w-12 h-12 p-2.5 rounded-lg bg-linear-to-br from-primary via-70% via-white/20 to-primary" />
+      <div className="max-lg:text-center">
+        <h1 className="font-bold ">{title}</h1>
+        <p className="text-text lg:text-lg max-w-5/6 mt-2 me-auto ms-auto">
+          {description}
+        </p>
       </div>
     </div>
   );

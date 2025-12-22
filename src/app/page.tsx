@@ -6,7 +6,7 @@ import RecentGoals from "./_components/RecentGoals";
 
 export default async function HomePage() {
   const { roadmaps, totalGoals } = await fetchRoadmapsServer();
-  console.log("Roadmaps on home page:", roadmaps, totalGoals);
+
   return (
     <>
       <header>

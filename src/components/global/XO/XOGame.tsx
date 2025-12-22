@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 
 type Player = "X" | "O" | null;
 
-export default function XOGame() {
+export default function XOGame({ onFinish }: { onFinish?: () => void }) {
   const [board, setBoard] = useState<Player[]>(Array(9).fill(null));
   const [playerSymbol] = useState<Player>(() =>
     Math.random() < 0.5 ? "X" : "O"
@@ -96,12 +96,21 @@ export default function XOGame() {
   const getStatusMessage = () => {
     if (winner === "draw") return "It's a draw!";
     if (winner) {
-      if (winner === playerSymbol) return "You win! 🎉";
+      if (winner === playerSymbol) return "You win!";
       return "Computer wins!";
     }
     if (isComputerTurn) return "Computer is thinking...";
     return `Your turn (${playerSymbol})`;
   };
+
+  useEffect(() => {
+    if (winner && onFinish) {
+      const timer = setTimeout(() => {
+        onFinish();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [winner, onFinish]);
 
   return (
     <div className="flex flex-col items-center gap-4 mt-8">

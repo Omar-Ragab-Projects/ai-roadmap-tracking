@@ -24,7 +24,7 @@ export default function FormGroup({
     required,
   };
   return (
-    <div className="not-first:mt-6">
+    <div className="not-first-of-type:mt-5 lg:not-first-of-type:mt-6">
       <label htmlFor={name}>
         {label && (
           <span>

@@ -36,7 +36,7 @@ export default function ChatForm({
         onKeyDown={hitEnterHandler}
         name="userContent"
       />
-      <div className="px-4 pb-4 flex-between">
+      <div className="px-4 pb-4 flex-between flex-wrap gap-4">
         <div className="flex items-baseline gap-4">
           <Button
             type="submit"
