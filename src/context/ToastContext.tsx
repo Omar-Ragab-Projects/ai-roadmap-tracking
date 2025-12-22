@@ -23,7 +23,7 @@ export default function ToastProvider({
     <ToastContext value={{ message, setMessage }}>
       {children}
       {message && (
-        <span className="animate-move-left  font-semibold shadow-md fixed h-fit top-6 right-4 border border-border bg-white py-2 pl-6 pr-10 w-fit rounded-lg">
+        <span className="animate-move-left z-100 font-semibold shadow-md fixed h-fit top-6 right-4 border border-border bg-white py-2 pl-6 pr-10 w-fit rounded-lg">
           {message}
           <X
             onClick={clearMessage}

@@ -15,9 +15,9 @@ export default function Conversation({
     return parts.map((part) => part.text).join(" ");
   };
   return (
-    <div className="lg:mt-8 ">
+    <div className="mt-4 lg:mt-8 ">
       {!chatData.length && (
-        <p className="text-center text-muted-foreground/40 text-sm">
+        <p className="text-center text-muted-foreground/40 text-sm ">
           Start the conversation by typing your message below.
         </p>
       )}
