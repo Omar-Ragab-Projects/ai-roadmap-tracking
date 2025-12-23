@@ -63,8 +63,9 @@ export default function EditGoalForm({
         defaultValue={goal.description || ""}
       />
       <div className="mt-6 flex items-center gap-2 lg:gap-4 flex-col lg:flex-row">
-        <label>
-          Priority<span className="hidden lg:inline">:</span>
+        <label className="flex-row">
+          <span>Priority</span>
+          <span className="hidden lg:inline">:</span>
         </label>
         <div className="flex-1 flex gap-2">
           {priorityOptions.map((option) => (

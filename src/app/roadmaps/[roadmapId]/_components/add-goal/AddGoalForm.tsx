@@ -42,7 +42,7 @@ export default function AddGoalForm({
         placeholder="Watch 4 hours daily of Elzero course..."
       />
       <div className="mt-6 flex items-center gap-2 lg:gap-4 flex-col lg:flex-row">
-        <label>
+        <label className="flex-row">
           Priority<span className="hidden lg:inline">:</span>
         </label>
         <div className="flex-1 flex gap-2">
