@@ -1,4 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**AI Roadmap Tracking**
+
+---
+
+### Built With:
+
+* Next.js
+* TypeScript
+* Tailwind
+* TanStack Query
+* Supabase
+* Google AI Studio
+* Recharts
+* dnd-kit
+
+---
+
+### Quick Brief:
+
+A panel that helps you focus on your e-learning journey by generating an AI Roadmap and allowing you to drag and drop goals to change their status.
+The AI Assistant can help you with a specific roadmap, with Pomodoro focus on each goal.
+
+---
+
+### Features By Route:
+
+#### Dashboard:
+
+* Shows your current state of completing roadmaps and goals.
+* Chart to visualize your roadmaps with completed and total goals.
+* See the latest 5 goals you worked on.
+
+#### Roadmaps:
+
+* CRUD your roadmaps.
+* View a progress bar for your goals statistics.
+
+#### Roadmap:
+
+* CRUD goals.
+* Drag and drop goals to change their status.
+* Saving data indicator using `useContext`.
+* Live progress bar state.
+* Take notes.
+
+#### AI Generator:
+
+* Generate roadmaps and goals using AI (Gemini).
+* Save generated roadmaps directly.
+
+#### Notes:
+
+* CRUD notes.
+* Download all notes.
+
+#### Focus Mode:
+
+* Select a roadmap and a goal to focus on.
+* Pomodoro timer with saved daily rounds.
+* Portal timer across the application using `useContext`.
+* Play, Pause, Reset, and Over actions.
+* Save timer state in `localStorage`.
+
+#### AI Assistant:
+
+* Chatbot that can focus on a specific roadmap.
+
+---
+
+### Auth:
+
+For quick discovery, `proxy.ts` (Middleware) generates a session token and sends it to the `anonymous_users` table to create a user without login or signup.
+
+---
 
 ## Getting Started
 
@@ -16,21 +89,11 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+For quick discovery, `proxy.ts` (Middleware) generates a session token and sends it to the `anonymous_users` table to create a user without login or signup.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+Looking forward to any suggestions 🙂
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Preview:** roadmaptracking.omarragab.dev
+**Source:** [https://github.com/Omar-Ragab-Projects/ai-roadmap-tracking/](https://github.com/Omar-Ragab-Projects/ai-roadmap-tracking/)
