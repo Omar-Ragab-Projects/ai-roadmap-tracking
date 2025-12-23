@@ -19,6 +19,9 @@ type FocusContextProps = {
   isTimerActive: boolean;
   setIsTimerActive: React.Dispatch<React.SetStateAction<boolean>>;
   getSelectedFocusTitle: () => string;
+  visible: boolean;
+  hidePortal: () => void;
+  showPortal: () => void;
 } | null;
 
 export const FocusContext = createContext<FocusContextProps>(null);
@@ -44,6 +47,10 @@ export default function FocusProvider({
   const [rounds, setRounds] = useState(0);
 
   const [isTimerActive, setIsTimerActive] = useState(false);
+
+  const [visible, setVisible] = useState(true);
+  const hidePortal = () => setVisible(false);
+  const showPortal = () => setVisible(true);
 
   const getSelectedFocusTitle = () => {
     if (choosedRoadmap && !choosedGoal) {
@@ -105,6 +112,9 @@ export default function FocusProvider({
         isTimerActive,
         setIsTimerActive,
         getSelectedFocusTitle,
+        visible,
+        hidePortal,
+        showPortal,
       }}
     >
       {children}

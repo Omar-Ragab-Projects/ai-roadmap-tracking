@@ -50,6 +50,7 @@ export default function FocusPage({
     setRounds,
     isTimerActive,
     getSelectedFocusTitle,
+    showPortal,
   } = focusContext;
 
   const { startFocus, pauseFocus, restartFocus, resetTimer } = useFocusActions({
@@ -64,6 +65,10 @@ export default function FocusPage({
     () => searchParamsObject.roadmap,
     [choosedRoadmap, choosedGoal]
   );
+
+  useEffect(() => {
+    showPortal();
+  }, []);
 
   // Focus Selection from URL
   useEffect(() => {

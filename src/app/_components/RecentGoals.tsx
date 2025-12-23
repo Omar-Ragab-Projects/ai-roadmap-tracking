@@ -22,11 +22,11 @@ export default function RecentGoals({ goals }: { goals: Goal[] }) {
         {latestDoneOrInprogressGoals.slice(0, 4).map((goal) => (
           <li key={goal.id} className="group relative not-last:mb-4">
             <Link
-              className="flex-between bg-muted/50 p-4 rounded-xl shadow-md border border-border hover:bg-muted/70 transition-colors cursor-pointer"
+              className="flex-between bg-muted/50 p-4 rounded-xl shadow-md border border-border hover:bg-muted/70 transition-colors cursor-pointer gap-2"
               href={`/roadmaps/${goal.roadmap_id}`}
               // target="_blank"
             >
-              <div>
+              <div className="max-w-[80%]">
                 <h4 className="font-medium">{goal.name}</h4>
                 <p className="text-text whitespace-break-spaces max-lines-2 mt-1">
                   {goal.description || "-"}
