@@ -58,7 +58,7 @@ export default function Note({
 
         <p
           onClick={() => setPreviewNote(note)}
-          className="max-characters mt-6 whitespace-pre-wrap break-all text-black/85 bg-muted/10 p-4 rounded-md hover:shadow hover:-translate-y-0.5 transition cursor-pointer hover:bg-primary/5"
+          className="max-lines-3 mt-6 whitespace-pre-wrap break-all text-black/85 bg-muted/10 p-4 rounded-md hover:shadow hover:-translate-y-0.5 transition cursor-pointer hover:bg-primary/5"
         >
           {note.note}
         </p>

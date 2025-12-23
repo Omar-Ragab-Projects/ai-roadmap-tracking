@@ -91,7 +91,7 @@ export const fetchRoadmapsServer = async () => {
     .from("goals")
     .select("*")
     .eq("user_id", user?.id)
-    .order("updated_at");
+    .order("updated_at", { ascending: false });
 
   const [roadmapsRes, goalsRes] = await Promise.all([
     roadmapsQuery,

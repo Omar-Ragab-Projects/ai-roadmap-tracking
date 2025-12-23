@@ -28,7 +28,7 @@ export default function RecentGoals({ goals }: { goals: Goal[] }) {
             >
               <div>
                 <h4 className="font-medium">{goal.name}</h4>
-                <p className="text-text whitespace-break-spaces max-characters mt-1">
+                <p className="text-text whitespace-break-spaces max-lines-2 mt-1">
                   {goal.description || "-"}
                 </p>
               </div>
