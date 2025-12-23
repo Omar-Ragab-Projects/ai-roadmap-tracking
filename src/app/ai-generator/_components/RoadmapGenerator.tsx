@@ -68,7 +68,7 @@ export default function RoadmapGenerator() {
 
       userContent += `\n\n
       You are an AI who will generate a structured learning roadmap based on the user's input
-      and into each goal description if you could send references like courses URLs and make it accessable in markdown.
+      and into each goal description if you could send references like courses URLs and make it accessable in markdown and always name it \`References:\`.
       If the user content is vague, send response asking for clarification in normal string type. else,
       I want you to give me the data in JSON format only, with the following structure:
       {

@@ -14,13 +14,16 @@ export default function MobileGoalStatus({ goal }: { goal: Goal }) {
   return (
     <>
       <select name="goalStatus" id="goalStatus" onChange={handleStatusChange}>
-        <option value="todo" selected={goal.status === "todo"}>
+        <option value="todo" defaultChecked={goal.status === "todo"}>
           To Do
         </option>
-        <option value="inprogress" selected={goal.status === "inprogress"}>
+        <option
+          value="inprogress"
+          defaultChecked={goal.status === "inprogress"}
+        >
           In Progress
         </option>
-        <option value="done" selected={goal.status === "done"}>
+        <option value="done" defaultChecked={goal.status === "done"}>
           Done
         </option>
       </select>
