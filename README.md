@@ -7,7 +7,7 @@
 * Tailwind
 * TanStack Query
 * Supabase
-* Google AI Studio
+* OpenAI + Groq API
 * Recharts
 * dnd-kit
 
@@ -43,7 +43,7 @@ The AI Assistant can help you with a specific roadmap, with Pomodoro focus on ea
 
 #### AI Generator:
 
-* Generate roadmaps and goals using AI (Gemini).
+* Generate roadmaps and goals using AI (Groq).
 * Save generated roadmaps directly.
 
 #### Notes:
