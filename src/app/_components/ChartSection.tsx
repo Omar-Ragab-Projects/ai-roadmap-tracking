@@ -57,7 +57,7 @@ export default function ChartSection({ roadmaps }: { roadmaps: Roadmap[] }) {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        {/* <XAxis dataKey="name" /> */}
         {!isMobile && <YAxis width="auto" />}
 
         <Tooltip />
