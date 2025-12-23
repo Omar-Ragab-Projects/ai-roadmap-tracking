@@ -1,11 +1,13 @@
 import { Roadmap } from "@/types/roadmap";
-import { GoogleGenAI } from "@google/genai";
+import OpenAI from "openai";
 import React, { useRef, useState } from "react";
 
 export default function useAI(sessionId: string) {
   const chatSessionRef = useRef<any>(null);
-  const ai = new GoogleGenAI({
-    apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || "",
+  const ai = new OpenAI({
+    apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY || "",
+    baseURL: "https://api.groq.com/openai/v1",
+    dangerouslyAllowBrowser: true,
   });
 
   const [lastAiMessageStream, setLastAiMessageStream] = useState<string>("");
@@ -27,11 +29,11 @@ export default function useAI(sessionId: string) {
       setHistory((pre) => [...pre, ...parsedHistory]);
     }
 
-    // Initialize chat session
-    chatSessionRef.current = ai.chats.create({
-      model: process.env.NEXT_PUBLIC_MODEL_VERSION || "gemini-2.5-flash",
+    // Store history for OpenAI format (no need to create chat session)
+    chatSessionRef.current = {
+      model: "llama-3.3-70b-versatile",
       history: parsedHistory,
-    });
+    };
   };
 
   async function getAiResponse(
@@ -65,13 +67,29 @@ export default function useAI(sessionId: string) {
     ]);
 
     try {
-      // Get AI response as stream
-      const response = await chatSessionRef.current.sendMessageStream({
-        message: contentToSend,
+      // Convert history to OpenAI format
+      const messages: OpenAI.Chat.ChatCompletionMessageParam[] =
+        chatSessionRef.current.history.map((msg: any) => ({
+          role: msg.role === "model" ? "assistant" : msg.role,
+          content: msg.parts[0].text,
+        }));
+
+      // Add current user message
+      messages.push({
+        role: "user",
+        content: contentToSend,
       });
 
-      for await (const chunk of response) {
-        text += chunk.text;
+      // Get AI response as stream
+      const stream = await ai.chat.completions.create({
+        model: chatSessionRef.current.model,
+        messages,
+        stream: true,
+      });
+
+      for await (const chunk of stream) {
+        const chunkText = chunk.choices[0]?.delta?.content || "";
+        text += chunkText;
 
         if (scrollTimes <= maxScrollTimes) {
           lastAiContentElement?.scrollIntoView({
@@ -81,8 +99,8 @@ export default function useAI(sessionId: string) {
 
         scrollTimes++;
 
-        if (lastAiContentElement) {
-          setLastAiMessageStream((pre) => pre + (chunk.text || ""));
+        if (lastAiContentElement && chunkText) {
+          setLastAiMessageStream((pre) => pre + chunkText);
         }
       }
     } catch (error) {

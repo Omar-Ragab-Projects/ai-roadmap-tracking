@@ -8,7 +8,6 @@ import useRender from "@/hooks/useRender";
 import { actionPromiseResponse } from "@/types/globalTypes";
 import { Roadmap } from "@/types/roadmap";
 import { Check, LoaderCircle, Sparkles, X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import GeneratedRoadmap from "./GeneratedRoadmap";
@@ -67,20 +66,35 @@ export default function RoadmapGenerator() {
       let userContent = formData.get("userContent") as string;
 
       userContent += `\n\n
-      You are an AI who will generate a structured learning roadmap based on the user's input
-      and into each goal description if you could send references like courses URLs and make it accessable in markdown and always name it \`References:\`.
-      If the user content is vague, send response asking for clarification in normal string type. else,
-      I want you to give me the data in JSON format only, with the following structure:
-      {
-        title: string;
-        description: string;
-        goals: {
-          name: string;
-          description: string;
-          priority: "high" | "medium" | "low";
-          status: "todo";
-        }[];
-      }.
+You are an AI assistant that generates structured learning roadmaps. 
+
+Instructions:
+- Generate a learning roadmap in JSON format ONLY.
+
+IMPORTANT JSON FORMAT - Follow this structure exactly:
+{
+  "title": "Roadmap Title Here",
+  "description": "Brief overview of what this roadmap covers",
+  "goals": [
+    {
+      "name": "Goal Name",
+      "description": "Detailed explanation of what to learn and how. Include key concepts, topics to master, and learning path. End with:\\n\\n### References:\\n- [Course or Resource Name](https://url-here.com)\\n- [Another Resource](https://url-here.com)",
+      "priority": "high",
+      "status": "todo"
+    }
+  ]
+}
+
+Requirements:
+- Create 6-10 separate goals that break down the learning path into clear progression steps
+- Each goal description must be detailed (at least 2-3 sentences explaining what to learn, why it matters, and how to approach it)
+- Write comprehensive, helpful content - be thorough and informative
+- Always end descriptions with "### References:" followed by 2-3 resource links
+- Use proper markdown links: [Title](URL)
+- Priority must be: "high", "medium", or "low"
+- Status must always be: "todo"
+- Return ONLY the JSON wrapped in \`\`\`json code block
+- Do NOT include line breaks within string values, use \\n instead
       `;
 
       (async () => getAiResponse(userContent))();
@@ -102,10 +116,30 @@ export default function RoadmapGenerator() {
   const generatedRoadmap = useMemo(() => {
     if (history.length === 0 || isLoading) return null;
     const aiResponse = history[history.length - 1]?.parts[0]?.text || "";
-    const generatedJSON = aiResponse.match(/`{3}json([\s\S]*?)`{3}/)?.[1];
+    // Try multiple JSON extraction patterns
+    let generatedJSON = aiResponse.match(/```json\s*([\s\S]*?)```/)?.[1];
+    if (!generatedJSON) {
+      generatedJSON = aiResponse.match(/```\s*([\s\S]*?)```/)?.[1];
+    }
+    if (!generatedJSON && aiResponse.trim().startsWith("{")) {
+      generatedJSON = aiResponse.trim();
+    }
 
     if (generatedJSON) {
-      return { tryAgain: false, data: JSON.parse(generatedJSON) };
+      try {
+        // Clean the JSON string by removing/escaping problematic characters
+        const cleanedJSON = generatedJSON
+          .replace(/[\u0000-\u001F\u007F-\u009F]/g, "") // Remove control characters
+          .trim();
+
+        return { tryAgain: false, data: JSON.parse(cleanedJSON) };
+      } catch (error) {
+        console.error("JSON parsing error:", error);
+        return {
+          tryAgain: true,
+          message: "Failed to parse the generated roadmap. Please try again.",
+        };
+      }
     } else {
       return { tryAgain: true, message: aiResponse };
     }
@@ -121,7 +155,7 @@ export default function RoadmapGenerator() {
     }
   }, [generatedRoadmap]);
 
-  // Function to delete a goal from the generated roadmap
+  // Delete a goal from the generated roadmap
   const deleteGoal = (index: number) => {
     if (!generatedRoadmapData) return;
 

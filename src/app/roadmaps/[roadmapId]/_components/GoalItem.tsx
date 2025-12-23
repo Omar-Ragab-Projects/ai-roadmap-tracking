@@ -74,18 +74,20 @@ export default function GoalItem({ goal }: { goal?: Goal }) {
             {/* {goa  l.description || "-"} */}
           </p>
           <ResponseMarkdown className="text-text">
-            {goal.description?.split("References:")[0] || "-"}
+            {goal.description?.split(/###?\s*References:/i)[0] || "-"}
           </ResponseMarkdown>
 
-          {goal.description?.split("References:")[1] && (
+          {goal.description?.match(/###?\s*References:/i) && (
             <Button className="mt-4" Icon={Eye} onClick={toggleShowReferences}>
               References
             </Button>
           )}
 
           <Dialog open={showReferences} onClose={toggleShowReferences}>
+            <h3 className="mb-4 font-semibold">References</h3>
             <ResponseMarkdown className="text-text ">
-              {goal.description?.split("References:")[1] || "No references."}
+              {goal.description?.split(/###?\s*References:/i)[1]?.trim() ||
+                "No references available."}
             </ResponseMarkdown>
           </Dialog>
         </div>
