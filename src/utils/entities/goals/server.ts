@@ -48,6 +48,7 @@ export const updateGoalAction = async (
   const name = formData.get("name");
   const description = formData.get("description");
   const priority = formData.get("priority");
+  console.log(priority);
 
   if (!name) return { status: "error", message: "Please add goal title." };
 

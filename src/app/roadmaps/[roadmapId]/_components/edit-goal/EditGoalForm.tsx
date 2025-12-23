@@ -73,7 +73,8 @@ export default function EditGoalForm({
               <input
                 type="radio"
                 name="priority"
-                value={priority}
+                checked={priority === option.value}
+                value={option.value}
                 onChange={() => setPriority(option.value)}
                 id={option.value}
                 hidden
