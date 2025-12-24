@@ -3,25 +3,21 @@ import {
   ChartColumn,
   PanelsTopLeft,
   Sparkles,
+  TrendingUp,
   WandSparkles,
   Zap,
 } from "lucide-react";
 
 export const routes = [
   {
-    name: "Dashboard",
+    name: "AI Generator",
     path: "/",
-    icon: PanelsTopLeft,
+    icon: WandSparkles,
   },
   {
     name: "Roadmaps",
     path: "/roadmaps",
     icon: ChartColumn,
-  },
-  {
-    name: "AI Generator",
-    path: "/ai-generator",
-    icon: WandSparkles,
   },
   {
     name: "Notes",
@@ -37,5 +33,10 @@ export const routes = [
     name: "AI Assistant",
     path: "/ai-assistant",
     icon: Sparkles,
+  },
+  {
+    name: "Progress",
+    path: "/progress",
+    icon: TrendingUp,
   },
 ];

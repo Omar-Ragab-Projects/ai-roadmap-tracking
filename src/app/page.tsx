@@ -1,27 +1,19 @@
 import PageTitle from "@/components/ui/PageTitle";
-import StatsSection from "./_components/StatsSection";
-import { fetchRoadmapsServer } from "@/utils/entities/roadmaps/server";
-import ChartSection from "./_components/ChartSection";
-import RecentGoals from "./_components/RecentGoals";
+import RoadmapGenerator from "./_components/ai-generator/RoadmapGenerator";
+import TipsSection from "./_components/ai-generator/TipsSection";
 
-export default async function HomePage() {
-  const { roadmaps, totalGoals } = await fetchRoadmapsServer();
-
+export default function AiGeneratorPage() {
   return (
     <>
       <header>
         <PageTitle
-          title="Welcome back!"
-          description="Track your learning progress and achieve your goals"
+          title="AI Roadmap Generator"
+          description="Let AI create a personalized learning roadmap for you."
         />
       </header>
 
-      <StatsSection roadmaps={roadmaps} totalGoals={totalGoals} />
-
-      <section className="grid md:grid-cols-2 gap-6 mt-10">
-        <ChartSection roadmaps={roadmaps} />
-        <RecentGoals goals={totalGoals} />
-      </section>
+      <RoadmapGenerator />
+      <TipsSection />
     </>
   );
 }
